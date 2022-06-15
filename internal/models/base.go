@@ -11,7 +11,7 @@ type Base struct {
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `sql:"index" json:"deleted_at"`
-	ID        uuid.UUID  `gorm:"primary_key;type:uuid;default:uuid_generate_v4()" json:"id"`
+	ID        uuid.UUID  `gorm:"primary_key;type:uuid;" json:"id"`
 }
 
 type WorkingDay struct {
