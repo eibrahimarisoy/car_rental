@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/eibrahimarisoy/car_rental/pkg/config"
+	db "github.com/eibrahimarisoy/car_rental/pkg/database"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +17,10 @@ func main() {
 	if err != nil {
 		fmt.Println("Failed to load config:", err)
 	}
+
+	DB := db.NewPsqlDB(cfg)
+
+	fmt.Println("DB:", DB)
 
 	r := gin.Default()
 
