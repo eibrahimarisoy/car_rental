@@ -1,0 +1,20 @@
+ServerConfig:
+  AppVersion: 1.0.0
+  Mode: Development
+  RoutePrefix: /api/v1
+  Debug: true
+  Port: 8080
+  TimeoutSecs: 60
+  ReadTimeoutSecs: 60
+  WriteTimeoutSecs: 12
+
+DBConfig:
+  DataSourceName: postgres://emre:Django123.@localhost:5432/car_rental?sslmode=disable
+  MaxOpen: 50
+  MaxIdle: 50
+  MaxLifetime: 5
+
+LoggerConfig:
+  Development: true
+  Encoding: JSON
+  Level: debug
