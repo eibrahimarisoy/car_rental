@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/eibrahimarisoy/car_rental/internal/car"
 	"github.com/eibrahimarisoy/car_rental/internal/location"
 	"github.com/eibrahimarisoy/car_rental/internal/office"
 	vendors "github.com/eibrahimarisoy/car_rental/internal/vendors"
@@ -36,5 +37,14 @@ func InitiliazeRoutes(rootRouter *gin.RouterGroup, db *gorm.DB, cfg *config.Conf
 
 	officeService := office.NewOfficeService(officeRepo)
 	office.NewOfficeHandler(officeGroup, officeService)
+
+	// Initialize car service, repo and handler here
+	carGroup := rootRouter.Group("/cars")
+
+	carRepo := car.NewCarRepository(db)
+	carRepo.Migration()
+
+	carService := car.NewCarService(carRepo)
+	car.NewCarHandler(carGroup, carService)
 
 }

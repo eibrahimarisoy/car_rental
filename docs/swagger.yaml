@@ -8,6 +8,34 @@ definitions:
       errMessage:
         type: string
     type: object
+  car.CarRequest:
+    properties:
+      fuel:
+        type: string
+      name:
+        type: string
+      office_id:
+        type: string
+      transmission:
+        type: string
+      vendor_id:
+        type: string
+    type: object
+  car.CarResponse:
+    properties:
+      fuel:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      office:
+        $ref: '#/definitions/office.OfficeResponse'
+      transmission:
+        type: string
+      vendor:
+        $ref: '#/definitions/vendors.VendorResponse'
+    type: object
   location.LocationRequest:
     properties:
       is_active:
@@ -108,6 +136,67 @@ info:
   title: Car Rental API
   version: "1.0"
 paths:
+  /cars/:
+    get:
+      consumes:
+      - application/json
+      description: List all cars with pagination and search
+      parameters:
+      - description: Search query
+        in: query
+        name: q
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pagination.Pagination'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/_type.APIErrorResponse'
+      summary: List all cars
+      tags:
+      - car
+    post:
+      consumes:
+      - application/json
+      description: Create a car with payload
+      parameters:
+      - description: Car payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/car.CarRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/car.CarResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/_type.APIErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/_type.APIErrorResponse'
+      summary: Create a car
+      tags:
+      - car
   /locations/:
     get:
       consumes:

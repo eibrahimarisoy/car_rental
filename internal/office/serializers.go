@@ -46,9 +46,7 @@ type OfficeResponse struct {
 	ID           uuid.UUID                 `json:"id"`
 	OpeningHours models.JsonTime           `json:"opening_hours"`
 	ClosingHours models.JsonTime           `json:"closing_hours"`
-	VendorID     uuid.UUID                 `json:"vendor_id"`
 	Vendor       vendors.VendorResponse    `json:"vendor"`
-	LocationID   uuid.UUID                 `json:"location_id"`
 	Location     location.LocationResponse `json:"location"`
 	WorkingDays  []string                  `json:"working_days"`
 }
@@ -59,8 +57,6 @@ func (r *OfficeResponse) FromOffice(office *models.Office) {
 	r.ID = office.ID
 	r.OpeningHours = office.OpeningHours
 	r.ClosingHours = office.ClosingHours
-	r.VendorID = office.VendorID
-	r.LocationID = office.LocationID
 
 	r.Vendor = vendors.VendorResponse(r.Vendor)
 	r.Location = location.LocationResponse(r.Location)

@@ -25,6 +25,99 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/cars/": {
+            "get": {
+                "description": "List all cars with pagination and search",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car"
+                ],
+                "summary": "List all cars",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search query",
+                        "name": "q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pagination.Pagination"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/_type.APIErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a car with payload",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car"
+                ],
+                "summary": "Create a car",
+                "parameters": [
+                    {
+                        "description": "Car payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/car.CarRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/car.CarResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/_type.APIErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/_type.APIErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/locations/": {
             "get": {
                 "description": "List all locations with pagination and search",
@@ -309,6 +402,49 @@ const docTemplate = `{
                 "errDetails": {},
                 "errMessage": {
                     "type": "string"
+                }
+            }
+        },
+        "car.CarRequest": {
+            "type": "object",
+            "properties": {
+                "fuel": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "office_id": {
+                    "type": "string"
+                },
+                "transmission": {
+                    "type": "string"
+                },
+                "vendor_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "car.CarResponse": {
+            "type": "object",
+            "properties": {
+                "fuel": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "office": {
+                    "$ref": "#/definitions/office.OfficeResponse"
+                },
+                "transmission": {
+                    "type": "string"
+                },
+                "vendor": {
+                    "$ref": "#/definitions/vendors.VendorResponse"
                 }
             }
         },
