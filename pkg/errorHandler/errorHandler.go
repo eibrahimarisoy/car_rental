@@ -14,17 +14,18 @@ import (
 )
 
 var (
-	InternalServerError      = errors.New("Internal Server Error")
-	NotFound                 = errors.New("Not Found")
-	RequestTimeoutError      = errors.New("Request Timeout")
-	CannotBindGivenData      = errors.New("Could not bind given data")
-	ValidationError          = errors.New("Validation failed for given payload")
-	UniqueError              = errors.New("Item should be unique on database")
-	Unauthorized             = errors.New("Unauthorized")
-	UnauthorizedError        = errors.New("Unauthorized")
-	GivenAssociationNotFound = errors.New("Given association not found")
-	RequiredFieldError       = errors.New("Required field is missing")
-	InvalidUUIDFormat        = errors.New("Invalid UUID format")
+	InternalServerError         = errors.New("Internal Server Error")
+	NotFound                    = errors.New("Not Found")
+	RequestTimeoutError         = errors.New("Request Timeout")
+	CannotBindGivenData         = errors.New("Could not bind given data")
+	ValidationError             = errors.New("Validation failed for given payload")
+	UniqueError                 = errors.New("Item should be unique on database")
+	Unauthorized                = errors.New("Unauthorized")
+	UnauthorizedError           = errors.New("Unauthorized")
+	GivenAssociationNotFound    = errors.New("Given association not found")
+	RequiredFieldError          = errors.New("Required field is missing")
+	InvalidUUIDFormat           = errors.New("Invalid UUID format")
+	InvalidIdentificationNumber = errors.New("Invalid identification number")
 )
 
 type RestError _type.APIErrorResponse
@@ -81,6 +82,8 @@ func ParseErrors(err error) RestErr {
 		return NewRestError(http.StatusBadRequest, ValidationError.Error(), err)
 	case strings.Contains(err.Error(), "required"):
 		return NewRestError(http.StatusBadRequest, RequiredFieldError.Error(), err)
+	case errors.Is(err, InvalidIdentificationNumber):
+		return NewRestError(http.StatusBadRequest, InvalidIdentificationNumber.Error(), err)
 	case strings.Contains(err.Error(), "23505"):
 		return NewRestError(http.StatusBadRequest, UniqueError.Error(), err)
 	case strings.Contains(err.Error(), "23503"):

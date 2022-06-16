@@ -2,9 +2,11 @@ package driver
 
 import (
 	"errors"
+	"regexp"
 	"time"
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
+	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
 	"github.com/google/uuid"
 )
 
@@ -33,6 +35,9 @@ func (r *DriverRequest) Validate() error {
 	}
 	if r.IdentificationNumber == "" {
 		return errors.New("required data")
+	}
+	if match, _ := regexp.MatchString("^[1-9]{1}[0-9]{9}[02468]{1}$", r.IdentificationNumber); !match {
+		return errorHandler.InvalidIdentificationNumber
 	}
 	if r.Birthday == models.JsonDate(time.Time{}) {
 		return errors.New("required data")
