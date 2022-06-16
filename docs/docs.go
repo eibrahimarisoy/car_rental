@@ -298,6 +298,99 @@ const docTemplate = `{
                 }
             }
         },
+        "/reservations/": {
+            "get": {
+                "description": "List all reservations with pagination and search",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reservation"
+                ],
+                "summary": "List all reservations",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search query",
+                        "name": "q",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pagination.Pagination"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/_type.APIErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a reservation with payload",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reservation"
+                ],
+                "summary": "Create a reservation",
+                "parameters": [
+                    {
+                        "description": "Reservation payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reservation.ReservationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/reservation.ReservationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/_type.APIErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/_type.APIErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/vendors/": {
             "get": {
                 "description": "List all vendors with pagination and search",
@@ -448,6 +541,55 @@ const docTemplate = `{
                 }
             }
         },
+        "driver.DriverRequest": {
+            "type": "object",
+            "properties": {
+                "birthday": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "identification_number": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "driver.DriverResponse": {
+            "type": "object",
+            "properties": {
+                "birthday": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "identification_number": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
         "location.LocationRequest": {
             "type": "object",
             "properties": {
@@ -514,17 +656,11 @@ const docTemplate = `{
                 "location": {
                     "$ref": "#/definitions/location.LocationResponse"
                 },
-                "location_id": {
-                    "type": "string"
-                },
                 "opening_hours": {
                     "type": "string"
                 },
                 "vendor": {
                     "$ref": "#/definitions/vendors.VendorResponse"
-                },
-                "vendor_id": {
-                    "type": "string"
                 },
                 "working_days": {
                     "type": "array",
@@ -552,6 +688,79 @@ const docTemplate = `{
                 },
                 "total_rows": {
                     "type": "integer"
+                }
+            }
+        },
+        "reservation.ReservationRequest": {
+            "type": "object",
+            "properties": {
+                "car_id": {
+                    "type": "string"
+                },
+                "driver_request": {
+                    "$ref": "#/definitions/driver.DriverRequest"
+                },
+                "drop_off_date": {
+                    "type": "string"
+                },
+                "drop_off_time": {
+                    "type": "string"
+                },
+                "dropoff_location_id": {
+                    "type": "string"
+                },
+                "office_id": {
+                    "type": "string"
+                },
+                "pick_up_date": {
+                    "type": "string"
+                },
+                "pick_up_time": {
+                    "type": "string"
+                },
+                "pickup_location_id": {
+                    "type": "string"
+                },
+                "vendor_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "reservation.ReservationResponse": {
+            "type": "object",
+            "properties": {
+                "car": {
+                    "$ref": "#/definitions/car.CarResponse"
+                },
+                "driver_response": {
+                    "$ref": "#/definitions/driver.DriverResponse"
+                },
+                "drop_off_date": {
+                    "type": "string"
+                },
+                "drop_off_time": {
+                    "type": "string"
+                },
+                "dropoff_location": {
+                    "$ref": "#/definitions/location.LocationResponse"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "office": {
+                    "$ref": "#/definitions/office.OfficeResponse"
+                },
+                "pick_up_date": {
+                    "type": "string"
+                },
+                "pick_up_time": {
+                    "type": "string"
+                },
+                "pickup_location": {
+                    "$ref": "#/definitions/location.LocationResponse"
+                },
+                "vendor": {
+                    "$ref": "#/definitions/vendors.VendorResponse"
                 }
             }
         },

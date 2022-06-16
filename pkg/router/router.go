@@ -4,6 +4,7 @@ import (
 	"github.com/eibrahimarisoy/car_rental/internal/car"
 	"github.com/eibrahimarisoy/car_rental/internal/location"
 	"github.com/eibrahimarisoy/car_rental/internal/office"
+	"github.com/eibrahimarisoy/car_rental/internal/reservation"
 	vendors "github.com/eibrahimarisoy/car_rental/internal/vendors"
 	"github.com/eibrahimarisoy/car_rental/pkg/config"
 	"github.com/gin-gonic/gin"
@@ -46,5 +47,14 @@ func InitiliazeRoutes(rootRouter *gin.RouterGroup, db *gorm.DB, cfg *config.Conf
 
 	carService := car.NewCarService(carRepo)
 	car.NewCarHandler(carGroup, carService)
+
+	// Initialize reservation service, repo and handler here
+	reservationGroup := rootRouter.Group("/reservations")
+
+	reservationRepo := reservation.NewReservationRepository(db)
+	reservationRepo.Migration()
+
+	reservationService := reservation.NewReservationService(reservationRepo)
+	reservation.NewReservationHandler(reservationGroup, reservationService)
 
 }

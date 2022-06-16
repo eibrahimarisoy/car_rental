@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,6 +14,30 @@ const (
 	ReservationStatusConfirmed ReservationStatus = "confirmed"
 	ReservationStatusCancelled ReservationStatus = "cancelled"
 )
+const dateFormat = "02-07-2006"
+
+type JsonDate time.Time
+
+func (t JsonDate) MarshalJSON() ([]byte, error) {
+	return []byte(`"` + time.Time(t).Format(dateFormat) + `"`), nil
+}
+
+func (t *JsonDate) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err != nil {
+		return err
+	}
+	t2, err := time.Parse(dateFormat, s)
+	if err != nil {
+		return err
+	}
+	*t = JsonDate(t2)
+	return nil
+}
+
+func (t JsonDate) String() string {
+	return time.Time(t).Format(dateFormat)
+}
 
 type Reservation struct {
 	Base
@@ -21,14 +46,14 @@ type Reservation struct {
 	PickupLocationID uuid.UUID `json:"pickup_location_id"`
 	PickupLocation   Location  `json:"pickup_location" gorm:"foreignkey:PickupLocationID"`
 
-	PickupDate time.Time `json:"pickup_date"`
-	PickupTime time.Time `json:"pickup_time"`
+	PickupDate JsonDate `json:"pickup_date"`
+	PickupTime JsonTime `json:"pickup_time"`
 
 	DropoffLocationID uuid.UUID `json:"dropoff_location_id"`
 	DropoffLocation   Location  `json:"dropoff_location" gorm:"foreignkey:DropoffLocationID"`
 
-	DropoffDate time.Time `json:"dropoff_date"`
-	DropoffTime time.Time `json:"dropoff_time"`
+	DropoffDate JsonDate `json:"dropoff_date"`
+	DropoffTime JsonTime `json:"dropoff_time"`
 
 	VendorID uuid.UUID `json:"vendor_id"`
 	Vendor   Vendor    `json:"vendor" gorm:"foreignkey:VendorID"`
