@@ -21,6 +21,7 @@ func NewLocationHandler(r *gin.RouterGroup, locationService LocationServiceInter
 	}
 
 	r.GET("/", mw.PaginationMiddleware(), handler.GetAllLocations)
+	r.POST("/", handler.CreateLocation)
 
 }
 
@@ -46,4 +47,43 @@ func (h *LocationHandler) GetAllLocations(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, pagination)
+}
+
+// CreateLocation is a handler to create a location
+// @Summary      Create a location
+// @Description  Create a location with payload
+// @Tags         location
+// @Accept       json
+// @Produce      json
+// @Param        body body    location.LocationRequest  true  "Location payload"
+// @Success      200  {object}  pagination.Pagination
+// @Failure	     400  {object}  _type.APIErrorResponse
+// @Failure      500  {object}  _type.APIErrorResponse
+// @Router       /locations/    [post]
+func (h *LocationHandler) CreateLocation(c *gin.Context) {
+	reqBody := LocationRequest{}
+
+	if err := c.ShouldBindJSON(&reqBody); err != nil {
+		c.JSON(errorHandler.ErrorResponse(err))
+		return
+	}
+
+	if err := reqBody.Validate(); err != nil {
+		c.JSON(errorHandler.ErrorResponse(err))
+		return
+	}
+
+	location := reqBody.ToModel()
+
+	location, err := h.locationService.CreateLocation(location)
+	if err != nil {
+		c.JSON(errorHandler.ErrorResponse(err))
+		return
+	}
+
+	locationResponse := LocationResponse{}
+	c.JSON(http.StatusOK, locationResponse.FromModel(location))
+
+	return
+
 }

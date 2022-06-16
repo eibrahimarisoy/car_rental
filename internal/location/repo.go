@@ -9,6 +9,7 @@ import (
 
 type LocationRepositoryInterface interface {
 	GetAllActiveLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	CreateLocation(location *models.Location) (*models.Location, error)
 }
 
 type LocationRepository struct {
@@ -38,4 +39,12 @@ func (r *LocationRepository) GetAllActiveLocations(pg *pgHelper.Pagination) (*pg
 
 	pg.Rows = &locations
 	return pg, nil
+}
+
+func (r *LocationRepository) CreateLocation(location *models.Location) (*models.Location, error) {
+
+	if err := r.db.Create(location).Error; err != nil {
+		return nil, err
+	}
+	return location, nil
 }
