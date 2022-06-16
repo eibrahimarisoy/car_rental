@@ -2,11 +2,12 @@ package location
 
 import (
 	"github.com/eibrahimarisoy/car_rental/internal/models"
+	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 	"gorm.io/gorm"
 )
 
 type LocationRepositoryInterface interface {
-	GetAllLocations() ([]*models.Location, error)
+	GetAllLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
 }
 
 type LocationRepository struct {
@@ -23,8 +24,13 @@ func (r *LocationRepository) Migration() {
 	r.db.AutoMigrate(&models.Location{})
 }
 
-func (r *LocationRepository) GetAllLocations() ([]*models.Location, error) {
+func (r *LocationRepository) GetAllLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
 	var locations []*models.Location
-	err := r.db.Find(&locations).Error
-	return locations, err
+	var totalRows int64
+
+	query := r.db.Model(&models.Location{}).Scopes(Search(pg.Q)).Count(&totalRows)
+	query.Scopes(pgHelper.Paginate(totalRows, pg, r.db)).Find(&locations)
+
+	pg.Rows = &locations
+	return pg, nil
 }

@@ -1,13 +1,15 @@
 package location
 
-import "github.com/eibrahimarisoy/car_rental/internal/models"
+import (
+	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
+)
 
 type LocationService struct {
 	locationRepo LocationRepositoryInterface
 }
 
 type LocationServiceInterface interface {
-	GetAllLocations() ([]*models.Location, error)
+	GetAllLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
 }
 
 func NewLocationService(locationRepo LocationRepositoryInterface) *LocationService {
@@ -16,6 +18,6 @@ func NewLocationService(locationRepo LocationRepositoryInterface) *LocationServi
 	}
 }
 
-func (s *LocationService) GetAllLocations() ([]*models.Location, error) {
-	return s.locationRepo.GetAllLocations()
+func (s *LocationService) GetAllLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
+	return s.locationRepo.GetAllLocations(pg)
 }
