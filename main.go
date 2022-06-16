@@ -11,8 +11,27 @@ import (
 	graceful "github.com/eibrahimarisoy/car_rental/pkg/graceful"
 	router "github.com/eibrahimarisoy/car_rental/pkg/router"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+	// swagger embed files
 )
 
+// @title           Car Rental API
+// @version         1.0
+// @description     This is a Car Rental API implementation.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  eibrahimarisoy@gmail.com
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /api/v1
+
+// @securityDefinitions.basic  BasicAuth
 func main() {
 
 	cfg, err := config.LoadConfig("./pkg/config/config-local")
@@ -31,6 +50,8 @@ func main() {
 		ReadTimeout:  time.Duration(cfg.ServerConfig.ReadTimeoutSecs) * time.Second,
 		WriteTimeout: time.Duration(cfg.ServerConfig.WriteTimeoutSecs) * time.Second,
 	}
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	rootRouter := r.Group(cfg.ServerConfig.RoutePrefix)
 	router.InitiliazeRoutes(rootRouter, DB, cfg)

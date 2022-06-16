@@ -1,0 +1,75 @@
+basePath: /api/v1
+definitions:
+  _type.ErrorType:
+    properties:
+      errCode:
+        type: integer
+      errMessage:
+        type: string
+    type: object
+  models.Location:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: eibrahimarisoy@gmail.com
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a Car Rental API implementation.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Car Rental API
+  version: "1.0"
+paths:
+  /accounts/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get string by ID
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Location'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/_type.ErrorType'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/_type.ErrorType'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/_type.ErrorType'
+      summary: Show an account
+      tags:
+      - accounts
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
