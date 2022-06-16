@@ -25,9 +25,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/accounts/{id}": {
+        "/locations/": {
             "get": {
-                "description": "get string by ID",
+                "description": "List all locations with pagination and search",
                 "consumes": [
                     "application/json"
                 ],
@@ -35,41 +35,40 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "location"
                 ],
-                "summary": "Show an account",
+                "summary": "List all locations",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Search query",
+                        "name": "q",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
-                        "description": "Account ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page limit",
+                        "name": "limit",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Location"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/_type.ErrorType"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/_type.ErrorType"
+                            "$ref": "#/definitions/pagination.Pagination"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/_type.ErrorType"
+                            "$ref": "#/definitions/_type.APIErrorResponse"
                         }
                     }
                 }
@@ -77,37 +76,36 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "_type.ErrorType": {
+        "_type.APIErrorResponse": {
             "type": "object",
             "properties": {
                 "errCode": {
                     "type": "integer"
                 },
+                "errDetails": {},
                 "errMessage": {
                     "type": "string"
                 }
             }
         },
-        "models.Location": {
+        "pagination.Pagination": {
             "type": "object",
             "properties": {
-                "created_at": {
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "q": {
                     "type": "string"
                 },
-                "deleted_at": {
-                    "type": "string"
+                "rows": {},
+                "total_pages": {
+                    "type": "integer"
                 },
-                "id": {
-                    "type": "string"
-                },
-                "is_active": {
-                    "type": "boolean"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
+                "total_rows": {
+                    "type": "integer"
                 }
             }
         }

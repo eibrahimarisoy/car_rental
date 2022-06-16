@@ -1,6 +1,10 @@
 package location
 
 import (
+	"fmt"
+	"net/http"
+
+	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
 	mw "github.com/eibrahimarisoy/car_rental/pkg/middlewares"
 	paginationHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 
@@ -20,29 +24,26 @@ func NewLocationHandler(r *gin.RouterGroup, locationService LocationServiceInter
 
 }
 
-// ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
+// GetAllLocations is a handler to get all locations
+// @Summary      List all locations
+// @Description  List all locations with pagination and search
+// @Tags         location
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  models.Location
-// @Failure      400  {object}  _type.ErrorType
-// @Failure      404  {object}  _type.ErrorType
-// @Failure      500  {object}  _type.ErrorType
-// @Router       /accounts/{id} [get]
+// @Param        q     query    string  false  "Search query"
+// @Param        page  query    int     false  "Page number"
+// @Param        limit query    int     false  "Page limit"
+// @Success      200  {object}  pagination.Pagination
+// @Failure      500  {object}  _type.APIErrorResponse
+// @Router       /locations/    [get]
 func (h *LocationHandler) GetAllLocations(c *gin.Context) {
 	pagination := c.MustGet("pagination").(*paginationHelper.Pagination)
 
-	pagination, err := h.locationService.GetAllLocations(pagination)
+	pagination, err := h.locationService.GetAllActiveLocations(pagination)
+	fmt.Println(err)
 	if err != nil {
-		c.JSON(500, gin.H{
-			"error": err.Error(),
-		})
+		c.JSON(errorHandler.ErrorResponse(err))
 		return
 	}
-	c.JSON(200, gin.H{
-		"locations": pagination,
-	})
+	c.JSON(http.StatusOK, pagination)
 }

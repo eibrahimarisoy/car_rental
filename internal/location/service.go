@@ -9,7 +9,7 @@ type LocationService struct {
 }
 
 type LocationServiceInterface interface {
-	GetAllLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	GetAllActiveLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
 }
 
 func NewLocationService(locationRepo LocationRepositoryInterface) *LocationService {
@@ -18,6 +18,6 @@ func NewLocationService(locationRepo LocationRepositoryInterface) *LocationServi
 	}
 }
 
-func (s *LocationService) GetAllLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
-	return s.locationRepo.GetAllLocations(pg)
+func (s *LocationService) GetAllActiveLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
+	return s.locationRepo.GetAllActiveLocations(pg)
 }

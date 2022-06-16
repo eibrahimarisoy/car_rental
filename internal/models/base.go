@@ -14,6 +14,11 @@ type Base struct {
 	ID        uuid.UUID  `gorm:"primary_key;type:uuid;" json:"id"`
 }
 
+func (b *Base) BeforeCreate(tx *gorm.DB) (err error) {
+	b.ID = uuid.New()
+	return
+}
+
 type WorkingDay struct {
 	gorm.Model
 	Day   string `json:"day" gorm:"type:varchar(10);not null"`

@@ -1,26 +1,26 @@
 basePath: /api/v1
 definitions:
-  _type.ErrorType:
+  _type.APIErrorResponse:
     properties:
       errCode:
         type: integer
+      errDetails: {}
       errMessage:
         type: string
     type: object
-  models.Location:
+  pagination.Pagination:
     properties:
-      created_at:
+      limit:
+        type: integer
+      page:
+        type: integer
+      q:
         type: string
-      deleted_at:
-        type: string
-      id:
-        type: string
-      is_active:
-        type: boolean
-      name:
-        type: string
-      updated_at:
-        type: string
+      rows: {}
+      total_pages:
+        type: integer
+      total_rows:
+        type: integer
     type: object
 host: localhost:8080
 info:
@@ -36,16 +36,23 @@ info:
   title: Car Rental API
   version: "1.0"
 paths:
-  /accounts/{id}:
+  /locations/:
     get:
       consumes:
       - application/json
-      description: get string by ID
+      description: List all locations with pagination and search
       parameters:
-      - description: Account ID
-        in: path
-        name: id
-        required: true
+      - description: Search query
+        in: query
+        name: q
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page limit
+        in: query
+        name: limit
         type: integer
       produces:
       - application/json
@@ -53,22 +60,14 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Location'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/_type.ErrorType'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/_type.ErrorType'
+            $ref: '#/definitions/pagination.Pagination'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/_type.ErrorType'
-      summary: Show an account
+            $ref: '#/definitions/_type.APIErrorResponse'
+      summary: List all locations
       tags:
-      - accounts
+      - location
 securityDefinitions:
   BasicAuth:
     type: basic
