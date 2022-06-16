@@ -6,6 +6,7 @@ import (
 )
 
 type LocationRepositoryInterface interface {
+	GetAllLocations() ([]*models.Location, error)
 }
 
 type LocationRepository struct {
@@ -20,4 +21,10 @@ func NewLocationRepository(db *gorm.DB) *LocationRepository {
 
 func (r *LocationRepository) Migration() {
 	r.db.AutoMigrate(&models.Location{})
+}
+
+func (r *LocationRepository) GetAllLocations() ([]*models.Location, error) {
+	var locations []*models.Location
+	err := r.db.Find(&locations).Error
+	return locations, err
 }
