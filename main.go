@@ -13,25 +13,19 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
-	// swagger embed files
 )
 
 // @title           Car Rental API
 // @version         1.0
 // @description     This is a Car Rental API implementation.
 // @termsOfService  http://swagger.io/terms/
-
 // @contact.name   API Support
 // @contact.url    http://www.swagger.io/support
 // @contact.email  eibrahimarisoy@gmail.com
-
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
-
 // @host      localhost:8080
 // @BasePath  /api/v1
-
-// @securityDefinitions.basic  BasicAuth
 func main() {
 
 	cfg, err := config.LoadConfig("./pkg/config/config-local")

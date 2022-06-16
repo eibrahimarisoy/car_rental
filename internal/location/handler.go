@@ -56,7 +56,7 @@ func (h *LocationHandler) GetAllLocations(c *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        body body    location.LocationRequest  true  "Location payload"
-// @Success      200  {object}  pagination.Pagination
+// @Success      201  {object}  location.LocationResponse
 // @Failure	     400  {object}  _type.APIErrorResponse
 // @Failure      500  {object}  _type.APIErrorResponse
 // @Router       /locations/    [post]
@@ -82,7 +82,7 @@ func (h *LocationHandler) CreateLocation(c *gin.Context) {
 	}
 
 	locationResponse := LocationResponse{}
-	c.JSON(http.StatusOK, locationResponse.FromModel(location))
+	c.JSON(http.StatusCreated, locationResponse.FromModel(location))
 
 	return
 

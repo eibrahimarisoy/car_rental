@@ -1,4 +1,4 @@
-package vendor
+package vendors
 
 import (
 	"net/http"
@@ -18,18 +18,42 @@ func NewVendorHandler(r *gin.RouterGroup, vendorService VendorServiceInterface) 
 		vendorService: vendorService,
 	}
 
-	r.POST("/", handler.CreateVendor)
 	r.GET("/", mw.PaginationMiddleware(), handler.GetVendors)
+	r.POST("/", handler.CreateVendor)
+}
+
+// GetVendors is a handler to get all vendors
+// @Summary      List all vendors
+// @Description  List all vendors with pagination and search
+// @Tags         vendors
+// @Accept       json
+// @Produce      json
+// @Param        q     query    string  false  "Search query"
+// @Param        page  query    int     false  "Page number"
+// @Param        limit query    int     false  "Page limit"
+// @Success      200  {object}  pagination.Pagination
+// @Failure      500  {object}  _type.APIErrorResponse
+// @Router       /vendors/    [get]
+func (h *VendorHandler) GetVendors(c *gin.Context) {
+	pagination := c.MustGet("pagination").(*paginationHelper.Pagination)
+
+	pagination, err := h.vendorService.GetVendors(pagination)
+
+	if err != nil {
+		c.JSON(errorHandler.ErrorResponse(err))
+		return
+	}
+	c.JSON(http.StatusOK, pagination)
 }
 
 // CreateVendor is a handler to create a vendor
 // @Summary      Create a vendor
 // @Description  Create a vendor with payload
-// @Tags         vendor
+// @Tags         vendors
 // @Accept       json
 // @Produce      json
-// @Param        body body      vendor.VendorRequest  true  "Vendor payload"
-// @Success      200  {object}  vendor.VendorResponse
+// @Param        body body      vendors.VendorRequest  true  "Vendor payload"
+// @Success      201  {object}  vendors.VendorResponse
 // @Failure	     400  {object}  _type.APIErrorResponse
 // @Failure      500  {object}  _type.APIErrorResponse
 // @Router       /vendors/    [post]
@@ -58,28 +82,4 @@ func (h *VendorHandler) CreateVendor(c *gin.Context) {
 
 	c.JSON(200, resBody)
 	return
-}
-
-// GetVendors is a handler to get all vendors
-// @Summary      List all vendors
-// @Description  List all vendors with pagination and search
-// @Tags         vendor
-// @Accept       json
-// @Produce      json
-// @Param        q     query    string  false  "Search query"
-// @Param        page  query    int     false  "Page number"
-// @Param        limit query    int     false  "Page limit"
-// @Success      200  {object}  pagination.Pagination
-// @Failure      500  {object}  _type.APIErrorResponse
-// @Router       /vendors/    [get]
-func (h *VendorHandler) GetVendors(c *gin.Context) {
-	pagination := c.MustGet("pagination").(*paginationHelper.Pagination)
-
-	pagination, err := h.vendorService.GetVendors(pagination)
-
-	if err != nil {
-		c.JSON(errorHandler.ErrorResponse(err))
-		return
-	}
-	c.JSON(http.StatusOK, pagination)
 }

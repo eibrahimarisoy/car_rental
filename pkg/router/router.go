@@ -2,7 +2,8 @@ package router
 
 import (
 	"github.com/eibrahimarisoy/car_rental/internal/location"
-	"github.com/eibrahimarisoy/car_rental/internal/vendor"
+	"github.com/eibrahimarisoy/car_rental/internal/office"
+	vendors "github.com/eibrahimarisoy/car_rental/internal/vendors"
 	"github.com/eibrahimarisoy/car_rental/pkg/config"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -21,10 +22,19 @@ func InitiliazeRoutes(rootRouter *gin.RouterGroup, db *gorm.DB, cfg *config.Conf
 	// Initialize vendor service, repo and handler here
 	vendorGroup := rootRouter.Group("/vendors")
 
-	vendorRepo := vendor.NewVendorRepository(db)
+	vendorRepo := vendors.NewVendorRepository(db)
 	vendorRepo.Migration()
 
-	vendorService := vendor.NewVendorService(vendorRepo)
-	vendor.NewVendorHandler(vendorGroup, vendorService)
+	vendorService := vendors.NewVendorService(vendorRepo)
+	vendors.NewVendorHandler(vendorGroup, vendorService)
+
+	// Initialize office service, repo and handler here
+	officeGroup := rootRouter.Group("/offices")
+
+	officeRepo := office.NewOfficeRepository(db)
+	officeRepo.Migration()
+
+	officeService := office.NewOfficeService(officeRepo)
+	office.NewOfficeHandler(officeGroup, officeService)
 
 }

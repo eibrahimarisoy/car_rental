@@ -15,6 +15,55 @@ definitions:
       name:
         type: string
     type: object
+  location.LocationResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  office.OfficeRequest:
+    properties:
+      closing_hours:
+        type: string
+      location_id:
+        type: string
+      opening_hours:
+        type: string
+      vendor_id:
+        type: string
+      working_days:
+        items:
+          type: integer
+        type: array
+    type: object
+  office.OfficeResponse:
+    properties:
+      closing_hours:
+        type: string
+      id:
+        type: string
+      location:
+        $ref: '#/definitions/location.LocationResponse'
+      location_id:
+        type: string
+      opening_hours:
+        type: string
+      vendor:
+        $ref: '#/definitions/vendors.VendorResponse'
+      vendor_id:
+        type: string
+      working_days:
+        items:
+          type: string
+        type: array
+    type: object
   pagination.Pagination:
     properties:
       limit:
@@ -28,6 +77,22 @@ definitions:
         type: integer
       total_rows:
         type: integer
+    type: object
+  vendors.VendorRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  vendors.VendorResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
     type: object
 host: localhost:8080
 info:
@@ -89,10 +154,10 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
-            $ref: '#/definitions/pagination.Pagination'
+            $ref: '#/definitions/location.LocationResponse'
         "400":
           description: Bad Request
           schema:
@@ -104,7 +169,122 @@ paths:
       summary: Create a location
       tags:
       - location
-securityDefinitions:
-  BasicAuth:
-    type: basic
+  /offices/:
+    get:
+      consumes:
+      - application/json
+      description: List all offices with pagination and search
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pagination.Pagination'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/_type.APIErrorResponse'
+      summary: List all offices
+      tags:
+      - offices
+    post:
+      consumes:
+      - application/json
+      description: Create a office with payload
+      parameters:
+      - description: Office payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/office.OfficeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/office.OfficeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/_type.APIErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/_type.APIErrorResponse'
+      summary: Create a office
+      tags:
+      - offices
+  /vendors/:
+    get:
+      consumes:
+      - application/json
+      description: List all vendors with pagination and search
+      parameters:
+      - description: Search query
+        in: query
+        name: q
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pagination.Pagination'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/_type.APIErrorResponse'
+      summary: List all vendors
+      tags:
+      - vendors
+    post:
+      consumes:
+      - application/json
+      description: Create a vendor with payload
+      parameters:
+      - description: Vendor payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vendors.VendorRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/vendors.VendorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/_type.APIErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/_type.APIErrorResponse'
+      summary: Create a vendor
+      tags:
+      - vendors
 swagger: "2.0"

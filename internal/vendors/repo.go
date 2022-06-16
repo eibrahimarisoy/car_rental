@@ -1,4 +1,4 @@
-package vendor
+package vendors
 
 import (
 	"github.com/eibrahimarisoy/car_rental/internal/models"

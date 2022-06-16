@@ -24,6 +24,7 @@ var (
 	UnauthorizedError        = errors.New("Unauthorized")
 	GivenAssociationNotFound = errors.New("Given association not found")
 	RequiredFieldError       = errors.New("Required field is missing")
+	InvalidUUIDFormat        = errors.New("Invalid UUID format")
 )
 
 type RestError _type.APIErrorResponse
@@ -66,6 +67,7 @@ func NewInternalServerError(causes interface{}) RestErr {
 
 // ParseErrors Parser of error string messages returns RestError
 func ParseErrors(err error) RestErr {
+	fmt.Println(err)
 	switch {
 	case errors.Is(err, sql.ErrNoRows):
 		return NewRestError(http.StatusNotFound, NotFound.Error(), err)
@@ -85,6 +87,8 @@ func ParseErrors(err error) RestErr {
 		return NewRestError(http.StatusBadRequest, GivenAssociationNotFound.Error(), err)
 	case strings.Contains(err.Error(), "cannot unmarshal"):
 		return NewRestError(http.StatusBadRequest, CannotBindGivenData.Error(), err)
+	case strings.Contains(err.Error(), "invalid UUID length"):
+		return NewRestError(http.StatusBadRequest, InvalidUUIDFormat.Error(), err)
 
 	default:
 		if restErr, ok := err.(RestErr); ok {

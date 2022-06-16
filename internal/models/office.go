@@ -1,15 +1,41 @@
 package models
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
 )
 
+const timeFormat = "15:04"
+
+type JsonTime time.Time
+
+func (t JsonTime) MarshalJSON() ([]byte, error) {
+	return []byte(`"` + time.Time(t).Format(timeFormat) + `"`), nil
+}
+
+func (t *JsonTime) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err != nil {
+		return err
+	}
+	t2, err := time.Parse(timeFormat, s)
+	if err != nil {
+		return err
+	}
+	*t = JsonTime(t2)
+	return nil
+}
+
+func (t JsonTime) String() string {
+	return time.Time(t).Format(timeFormat)
+}
+
 type Office struct {
 	Base
-	OpeningHours time.Time `json:"opening_hours"`
-	ClosingHours time.Time `json:"closing_hours"`
+	OpeningHours JsonTime `json:"opening_hours"`
+	ClosingHours JsonTime `json:"closing_hours"`
 
 	VendorID uuid.UUID `json:"vendor_id" gorm:"not null"`
 	Vendor   Vendor    `json:"vendor" gorm:"foreignkey:VendorID"`
