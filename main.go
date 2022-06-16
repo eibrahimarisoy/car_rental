@@ -78,7 +78,7 @@ func main() {
 			log.Fatalf("Listen error: %v", err)
 		}
 	}()
-	log.Println("Patika ecommerce service started")
+	log.Println("Car Rental API service started")
 
 	// Wait for interrupt signal to gracefully shutdown the server with
 	graceful.ShutdownGin(srv, time.Duration(cfg.ServerConfig.TimeoutSecs*int64(time.Second)))

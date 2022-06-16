@@ -71,7 +71,7 @@ func ParseErrors(err error) RestErr {
 		return NewRestError(http.StatusNotFound, NotFound.Error(), err)
 	case errors.Is(err, context.DeadlineExceeded):
 		return NewRestError(http.StatusRequestTimeout, RequestTimeoutError.Error(), err)
-	case errors.Is(err, CannotBindGivenData):
+	case errors.Is(err, CannotBindGivenData) || strings.Contains(err.Error(), "EOF"):
 		return NewRestError(http.StatusBadRequest, CannotBindGivenData.Error(), err)
 	case errors.Is(err, gorm.ErrRecordNotFound):
 		return NewRestError(http.StatusNotFound, gorm.ErrRecordNotFound.Error(), err)
