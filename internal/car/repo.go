@@ -1,6 +1,8 @@
 package car
 
 import (
+	"fmt"
+
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
@@ -8,7 +10,7 @@ import (
 )
 
 type CarRepositoryInterface interface {
-	GetCars(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error)
 	CreateCar(car *models.Car) (*models.Car, error)
 }
 
@@ -27,7 +29,36 @@ func (r *CarRepository) Migration() {
 }
 
 // TODO
-func (r *CarRepository) GetCars(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
+func (r *CarRepository) GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error) {
+	fmt.Println("filter: ", filter)
+	location := models.Location{}
+	locationId := filter.Location
+
+	res := r.db.Model(&models.Location{}).Where("id = ? AND is_active = ?", locationId, true).First(&location)
+	if res.Error != nil || res.Error == gorm.ErrRecordNotFound {
+		return nil, fmt.Errorf("Location is Not Active")
+	}
+
+	pickupWeekDay := (filter.PickupDate.ToTime().Weekday())
+	dropoffWeekDay := (filter.DropoffDate.ToTime().Weekday())
+
+	pickupTime := filter.PickupTime.ToTime()
+	dropoffTime := filter.DropoffTime.ToTime()
+
+	fmt.Println("pickupWeekDay: ", pickupWeekDay)
+	fmt.Println("dropoffWeekDay: ", dropoffWeekDay)
+
+	fmt.Println("pickupTime: ", pickupTime)
+	fmt.Println("dropoffTime: ", dropoffTime)
+
+	office := models.Office{}
+	res = r.db.Model(&models.Office{}).Where(
+		"opening_hours <= ? AND opening_hours <=  ? AND closing_hours >= ? AND closing_hours >= ? AND location_id = ?",
+		pickupTime, dropoffTime, pickupTime, dropoffTime, locationId,
+	).Where(r.db.Table("office_working_days").Where("value IN ?", []int{1, 2, 3, 4, 5, 6, 7})).First(&office)
+
+	fmt.Println("office: ", office)
+
 	var cars []*models.Car
 	var totalRows int64
 

@@ -32,6 +32,18 @@ func (t JsonTime) String() string {
 	return time.Time(t).Format(timeFormat)
 }
 
+// FromString converts string to JsonTime
+func (t JsonTime) FromString(s string) JsonTime {
+	t2, _ := time.Parse(timeFormat, s)
+	t = JsonTime(t2)
+	return JsonTime(t2)
+}
+
+// ToTime converts JsonTime to time.Time
+func (t JsonTime) ToTime() time.Time {
+	return time.Time(t)
+}
+
 type Office struct {
 	Base
 	OpeningHours JsonTime `json:"opening_hours"`

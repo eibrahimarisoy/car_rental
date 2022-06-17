@@ -26,3 +26,11 @@ type WorkingDay struct {
 
 	Offices []Office `json:"offices" gorm:"many2many:office_working_days"`
 }
+
+// create table office_working_days (
+//   office_id uuid not null,
+//   working_day_id uuid not null,
+//   primary key (office_id, working_day_id)
+// );
+
+// Create WorkingDay

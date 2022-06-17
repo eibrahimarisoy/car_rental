@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,7 +15,7 @@ const (
 	ReservationStatusConfirmed ReservationStatus = "confirmed"
 	ReservationStatusCancelled ReservationStatus = "cancelled"
 )
-const dateFormat = "02-07-2006"
+const dateFormat = "02-01-2006"
 
 type JsonDate time.Time
 
@@ -37,6 +38,24 @@ func (t *JsonDate) UnmarshalJSON(data []byte) error {
 
 func (t JsonDate) String() string {
 	return time.Time(t).Format(dateFormat)
+}
+
+// ToTime converts JsonDate to time.Time
+func (t JsonDate) ToTime() time.Time {
+	fmt.Println(t)
+	fmt.Println(time.Time(t))
+	return time.Time(t)
+}
+
+// FromTime converts time.Time to JsonDate
+func (t JsonDate) FromTime(t2 time.Time) JsonDate {
+	return JsonDate(t2)
+}
+
+// FromString converts string to JsonDate
+func (t JsonDate) FromString(s string) JsonDate {
+	t2, _ := time.Parse(dateFormat, s)
+	return JsonDate(t2)
 }
 
 type Reservation struct {

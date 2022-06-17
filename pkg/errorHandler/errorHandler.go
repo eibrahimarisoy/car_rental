@@ -26,6 +26,7 @@ var (
 	RequiredFieldError          = errors.New("Required field is missing")
 	InvalidUUIDFormat           = errors.New("Invalid UUID format")
 	InvalidIdentificationNumber = errors.New("Invalid identification number")
+	LocationNoAvailable         = errors.New("Location is not available")
 )
 
 type RestError _type.APIErrorResponse
@@ -92,6 +93,8 @@ func ParseErrors(err error) RestErr {
 		return NewRestError(http.StatusBadRequest, CannotBindGivenData.Error(), err)
 	case strings.Contains(err.Error(), "invalid UUID length"):
 		return NewRestError(http.StatusBadRequest, InvalidUUIDFormat.Error(), err)
+	case strings.Contains(err.Error(), "Location is Not Active"):
+		return NewRestError(http.StatusBadRequest, LocationNoAvailable.Error(), err)
 
 	default:
 		if restErr, ok := err.(RestErr); ok {

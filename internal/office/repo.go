@@ -26,6 +26,7 @@ func NewOfficeRepository(db *gorm.DB) *OfficeRepository {
 
 func (r *OfficeRepository) Migration() {
 	r.db.AutoMigrate(&models.Office{})
+	r.LoadWorkingDay()
 }
 
 // GetOffices returns all offices
@@ -64,4 +65,25 @@ func (r *OfficeRepository) CreateOffice(office *models.Office) (*models.Office, 
 
 	tx.Commit()
 	return office, nil
+}
+
+// CreateWorkingDay creates a new working day
+func (r *OfficeRepository) LoadWorkingDay() error {
+	workingDay := models.WorkingDay{}
+
+	workingDays := []models.WorkingDay{
+		{Value: 1, Day: "Monday"},
+		{Value: 2, Day: "Tuesday"},
+		{Value: 3, Day: "Wednesday"},
+		{Value: 4, Day: "Thursday"},
+		{Value: 5, Day: "Friday"},
+		{Value: 6, Day: "Saturday"},
+		{Value: 7, Day: "Sunday"},
+	}
+
+	for _, item := range workingDays {
+		r.db.Model(&workingDay).Create(&item)
+	}
+
+	return nil
 }

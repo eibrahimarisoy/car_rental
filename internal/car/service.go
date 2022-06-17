@@ -10,7 +10,7 @@ type CarService struct {
 }
 
 type CarServiceInterface interface {
-	GetCars(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error)
 	CreateCar(car *models.Car) (*models.Car, error)
 }
 
@@ -20,8 +20,8 @@ func NewCarService(carRepo CarRepositoryInterface) *CarService {
 	}
 }
 
-func (s *CarService) GetCars(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
-	return s.carRepo.GetCars(pg)
+func (s *CarService) GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error) {
+	return s.carRepo.GetCars(pg, filter)
 }
 
 func (s *CarService) CreateCar(car *models.Car) (*models.Car, error) {
