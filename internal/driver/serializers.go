@@ -15,8 +15,8 @@ type DriverRequest struct {
 	LastName             string          `json:"last_name"`
 	Email                string          `json:"email"`
 	Phone                string          `json:"phone"`
-	IdentificationNumber string          `json:"identification_number"`
 	Birthday             models.JsonDate `json:"birthday"`
+	IdentificationNumber string          `json:"identification_number"`
 }
 
 // Validate validates the driver request.

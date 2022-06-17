@@ -18,3 +18,9 @@
 tmp/*
 
 config-local.yaml
+
+# Environments
+.env
+.env/
+.venv/
+env/

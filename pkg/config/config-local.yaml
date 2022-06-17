@@ -9,10 +9,15 @@ ServerConfig:
   WriteTimeoutSecs: 12
 
 DBConfig:
-  DataSourceName: postgres://emre:Django123.@localhost:5432/car_rental?sslmode=disable
+  DataSourceName: postgres://emre:Django123.@postgresdb:5432/car_rental?sslmode=disable
   MaxOpen: 50
   MaxIdle: 50
   MaxLifetime: 5
+  DB_USER: emre
+  DB_PASSWORD: Django123.
+  DB_HOST: postgresdb 
+  DB_PORT: 5432 
+  DB_NAME: car_rental
 
 LoggerConfig:
   Development: true
