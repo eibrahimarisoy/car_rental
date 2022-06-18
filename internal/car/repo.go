@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
+	"github.com/google/uuid"
 
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 	"gorm.io/gorm"
@@ -30,7 +31,6 @@ func (r *CarRepository) Migration() {
 
 // TODO
 func (r *CarRepository) GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error) {
-	fmt.Println("filter: ", filter)
 	location := models.Location{}
 	locationId := filter.Location
 
@@ -39,30 +39,31 @@ func (r *CarRepository) GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pg
 		return nil, fmt.Errorf("Location is Not Active")
 	}
 
-	pickupWeekDay := (filter.PickupDate.ToTime().Weekday())
-	dropoffWeekDay := (filter.DropoffDate.ToTime().Weekday())
+	pickupWeekDay := int(filter.PickupDate.ToTime().Weekday())
+	dropoffWeekDay := int(filter.DropoffDate.ToTime().Weekday())
 
 	pickupTime := filter.PickupTime.ToTime()
 	dropoffTime := filter.DropoffTime.ToTime()
 
-	fmt.Println("pickupWeekDay: ", pickupWeekDay)
-	fmt.Println("dropoffWeekDay: ", dropoffWeekDay)
+	officeIDs := []uuid.UUID{}
 
-	fmt.Println("pickupTime: ", pickupTime)
-	fmt.Println("dropoffTime: ", dropoffTime)
-
-	office := models.Office{}
-	res = r.db.Model(&models.Office{}).Where(
+	res = r.db.Model(&models.Office{}).Select("id").Where(
 		"opening_hours <= ? AND opening_hours <=  ? AND closing_hours >= ? AND closing_hours >= ? AND location_id = ?",
 		pickupTime, dropoffTime, pickupTime, dropoffTime, locationId,
-	).Where(r.db.Table("office_working_days").Where("value IN ?", []int{1, 2, 3, 4, 5, 6, 7})).First(&office)
-
-	fmt.Println("office: ", office)
+	).Joins(
+		"JOIN office_working_days ON office_working_days.office_id = offices.id",
+	).Where(
+		"office_working_days.working_day_id IN ?", []int{pickupWeekDay, dropoffWeekDay},
+	).Find(&officeIDs)
 
 	var cars []*models.Car
 	var totalRows int64
 
-	query := r.db.Model(&models.Car{}).Preload("Vendor").Preload("Office").Scopes().Count(&totalRows)
+	query := r.db.Model(&models.Car{}).Preload("Office").Preload("Vendor").
+		Where(
+			"office_id IN ?", officeIDs,
+		).Find(&cars).Scopes().Count(&totalRows)
+
 	query.Scopes(pgHelper.Paginate(totalRows, pg, r.db)).Find(&cars)
 
 	if query.Error != nil {
