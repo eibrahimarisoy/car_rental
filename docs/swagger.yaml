@@ -10,7 +10,7 @@ definitions:
     type: object
   car.CarListResponse:
     properties:
-      cars:
+      data:
         items:
           $ref: '#/definitions/car.CarResponse'
         type: array
@@ -20,7 +20,6 @@ definitions:
         type: integer
       q:
         type: string
-      rows: {}
       total_pages:
         type: integer
       total_rows:
@@ -127,6 +126,23 @@ definitions:
       phone:
         type: string
     type: object
+  location.LocationListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/location.LocationResponse'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      q:
+        type: string
+      total_pages:
+        type: integer
+      total_rows:
+        type: integer
+    type: object
   location.LocationRequest:
     properties:
       is_active:
@@ -146,6 +162,23 @@ definitions:
         type: string
       updated_at:
         type: string
+    type: object
+  office.OfficeListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/office.OfficeResponse'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      q:
+        type: string
+      total_pages:
+        type: integer
+      total_rows:
+        type: integer
     type: object
   office.OfficeRequest:
     properties:
@@ -179,23 +212,9 @@ definitions:
           type: string
         type: array
     type: object
-  pagination.Pagination:
-    properties:
-      limit:
-        type: integer
-      page:
-        type: integer
-      q:
-        type: string
-      rows: {}
-      total_pages:
-        type: integer
-      total_rows:
-        type: integer
-    type: object
   reservation.ReservationListResponse:
     properties:
-      cars:
+      data:
         items:
           $ref: '#/definitions/reservation.ReservationResponse'
         type: array
@@ -205,7 +224,6 @@ definitions:
         type: integer
       q:
         type: string
-      rows: {}
       total_pages:
         type: integer
       total_rows:
@@ -266,6 +284,23 @@ definitions:
         type: string
       pickup_location:
         $ref: '#/definitions/location.LocationResponse'
+    type: object
+  vendors.VendorListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/vendors.VendorResponse'
+        type: array
+      limit:
+        type: integer
+      page:
+        type: integer
+      q:
+        type: string
+      total_pages:
+        type: integer
+      total_rows:
+        type: integer
     type: object
   vendors.VendorRequest:
     properties:
@@ -407,7 +442,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/pagination.Pagination'
+            $ref: '#/definitions/location.LocationListResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -464,7 +499,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/pagination.Pagination'
+            $ref: '#/definitions/office.OfficeListResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -586,7 +621,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/pagination.Pagination'
+            $ref: '#/definitions/vendors.VendorListResponse'
         "500":
           description: Internal Server Error
           schema:

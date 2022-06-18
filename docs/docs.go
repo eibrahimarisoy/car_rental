@@ -190,7 +190,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pagination.Pagination"
+                            "$ref": "#/definitions/location.LocationListResponse"
                         }
                     },
                     "500": {
@@ -277,7 +277,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pagination.Pagination"
+                            "$ref": "#/definitions/office.OfficeListResponse"
                         }
                     },
                     "500": {
@@ -463,7 +463,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pagination.Pagination"
+                            "$ref": "#/definitions/vendors.VendorListResponse"
                         }
                     },
                     "500": {
@@ -536,7 +536,7 @@ const docTemplate = `{
         "car.CarListResponse": {
             "type": "object",
             "properties": {
-                "cars": {
+                "data": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/car.CarResponse"
@@ -551,7 +551,6 @@ const docTemplate = `{
                 "q": {
                     "type": "string"
                 },
-                "rows": {},
                 "total_pages": {
                     "type": "integer"
                 },
@@ -708,6 +707,32 @@ const docTemplate = `{
                 }
             }
         },
+        "location.LocationListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/location.LocationResponse"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "q": {
+                    "type": "string"
+                },
+                "total_pages": {
+                    "type": "integer"
+                },
+                "total_rows": {
+                    "type": "integer"
+                }
+            }
+        },
         "location.LocationRequest": {
             "type": "object",
             "properties": {
@@ -736,6 +761,32 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "office.OfficeListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/office.OfficeResponse"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "q": {
+                    "type": "string"
+                },
+                "total_pages": {
+                    "type": "integer"
+                },
+                "total_rows": {
+                    "type": "integer"
                 }
             }
         },
@@ -788,31 +839,10 @@ const docTemplate = `{
                 }
             }
         },
-        "pagination.Pagination": {
-            "type": "object",
-            "properties": {
-                "limit": {
-                    "type": "integer"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "q": {
-                    "type": "string"
-                },
-                "rows": {},
-                "total_pages": {
-                    "type": "integer"
-                },
-                "total_rows": {
-                    "type": "integer"
-                }
-            }
-        },
         "reservation.ReservationListResponse": {
             "type": "object",
             "properties": {
-                "cars": {
+                "data": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/reservation.ReservationResponse"
@@ -827,7 +857,6 @@ const docTemplate = `{
                 "q": {
                     "type": "string"
                 },
-                "rows": {},
                 "total_pages": {
                     "type": "integer"
                 },
@@ -911,6 +940,32 @@ const docTemplate = `{
                 },
                 "pickup_location": {
                     "$ref": "#/definitions/location.LocationResponse"
+                }
+            }
+        },
+        "vendors.VendorListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/vendors.VendorResponse"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "q": {
+                    "type": "string"
+                },
+                "total_pages": {
+                    "type": "integer"
+                },
+                "total_rows": {
+                    "type": "integer"
                 }
             }
         },

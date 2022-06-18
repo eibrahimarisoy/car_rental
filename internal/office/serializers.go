@@ -4,6 +4,7 @@ import (
 	"github.com/eibrahimarisoy/car_rental/internal/location"
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/eibrahimarisoy/car_rental/internal/vendors"
+	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 	"github.com/google/uuid"
 )
 
@@ -80,4 +81,20 @@ func OfficeToSimpleResponse(office *models.Office) *OfficeSimpleResponse {
 	}
 
 	return &res
+}
+
+// OfficeListResponse is the response for the list of offices
+type OfficeListResponse struct {
+	pgHelper.Pagination
+	Data []OfficeResponse `json:"data"`
+}
+
+// OfficesToOfficeListResponse converts a list of offices to a response
+func OfficesToOfficeListResponse(offices *[]models.Office, pg *pgHelper.Pagination) *OfficeListResponse {
+	response := &OfficeListResponse{}
+	response.Pagination = *pg
+	for _, office := range *offices {
+		response.Data = append(response.Data, *OfficeToResponse(&office))
+	}
+	return response
 }

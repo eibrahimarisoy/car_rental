@@ -46,7 +46,7 @@ func VendorToResponse(vendor *models.Vendor) *VendorResponse {
 
 type VendorListResponse struct {
 	pgHelper.Pagination
-	Data []VendorResponse `json:"cars"`
+	Data []VendorResponse `json:"data"`
 }
 
 // VendorsToVendorListResponse converts a list of reservations to a reservation list response

@@ -31,7 +31,7 @@ func NewVendorHandler(r *gin.RouterGroup, vendorService VendorServiceInterface) 
 // @Param        q     query    string  false  "Search query"
 // @Param        page  query    int     false  "Page number"
 // @Param        limit query    int     false  "Page limit"
-// @Success      200  {object}  vendor.VendorListResponse
+// @Success      200  {object}  vendors.VendorListResponse
 // @Failure      500  {object}  _type.APIErrorResponse
 // @Router       /vendors/    [get]
 func (h *VendorHandler) GetVendors(c *gin.Context) {

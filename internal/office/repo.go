@@ -12,7 +12,7 @@ import (
 )
 
 type OfficeRepositoryInterface interface {
-	GetOffices(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	GetOffices(pg *pgHelper.Pagination) (*[]models.Office, error)
 	CreateOffice(office *models.Office) (*models.Office, error)
 	FindByOfficeAndVendorID(officeID, vendorID uuid.UUID) (*models.Office, error)
 	GetOfficeIDs(locationId uuid.UUID, pickupWeekDay, dropoffWeekDay int, pickupTime, dropoffTime time.Time) ([]uuid.UUID, error)
@@ -56,8 +56,8 @@ func (r *OfficeRepository) LoadWorkingDay() error {
 }
 
 // GetOffices returns all offices
-func (r *OfficeRepository) GetOffices(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
-	var offices []models.Office
+func (r *OfficeRepository) GetOffices(pg *pgHelper.Pagination) (*[]models.Office, error) {
+	var offices *[]models.Office
 	var totalRows int64
 
 	query := r.db.Model(&models.Office{}).Preload("Location").Preload("Vendor").Count(&totalRows)
@@ -66,9 +66,7 @@ func (r *OfficeRepository) GetOffices(pg *pgHelper.Pagination) (*pgHelper.Pagina
 	if query.Error != nil {
 		return nil, query.Error
 	}
-
-	pg.Rows = &offices
-	return pg, nil
+	return offices, nil
 
 }
 

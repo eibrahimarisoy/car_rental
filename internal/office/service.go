@@ -10,7 +10,7 @@ type OfficeService struct {
 }
 
 type OfficeServiceInterface interface {
-	GetOffices(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	GetOffices(pg *pgHelper.Pagination) (*[]models.Office, error)
 	CreateOffice(office *models.Office) (*models.Office, error)
 }
 
@@ -20,7 +20,7 @@ func NewOfficeService(officeRepo OfficeRepositoryInterface) *OfficeService {
 	}
 }
 
-func (s *OfficeService) GetOffices(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
+func (s *OfficeService) GetOffices(pg *pgHelper.Pagination) (*[]models.Office, error) {
 	return s.officeRepo.GetOffices(pg)
 }
 

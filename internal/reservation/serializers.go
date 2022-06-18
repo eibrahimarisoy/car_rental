@@ -100,7 +100,7 @@ func ReservationToResponse(reservation *models.Reservation) *ReservationResponse
 
 type ReservationListResponse struct {
 	pgHelper.Pagination
-	Data []ReservationResponse `json:"cars"`
+	Data []ReservationResponse `json:"data"`
 }
 
 // ReservationsToReservationListResponse converts a list of reservations to a reservation list response

@@ -28,18 +28,18 @@ func NewOfficeHandler(r *gin.RouterGroup, officeService OfficeServiceInterface) 
 // @Produce      json
 // @Param        page  query    int     false  "Page number"
 // @Param        limit query    int     false  "Page limit"
-// @Success      200  {object}  pagination.Pagination
+// @Success      200  {object}  office.OfficeListResponse
 // @Failure      500  {object}  _type.APIErrorResponse
 // @Router       /offices/    [get]
 func (h *OfficeHandler) GetOffices(c *gin.Context) {
 	pagination := c.MustGet("pagination").(*pgHelper.Pagination)
 
-	pagination, err := h.officeService.GetOffices(pagination)
+	offices, err := h.officeService.GetOffices(pagination)
 	if err != nil {
 		c.JSON(errorHandler.ErrorResponse(err))
 		return
 	}
-	c.JSON(http.StatusOK, pagination)
+	c.JSON(http.StatusOK, OfficesToOfficeListResponse(offices, pagination))
 }
 
 // CreateOffice is a handler to create a office
