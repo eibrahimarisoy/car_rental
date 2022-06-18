@@ -405,8 +405,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/reservation.ReservationResponse"
                         }
@@ -608,27 +608,24 @@ const docTemplate = `{
             "properties": {
                 "birthday": {
                     "type": "string",
-                    "format": "02-01-2006",
-                    "example": "02-08-2022"
+                    "format": "02-01-2006"
                 },
                 "email": {
                     "type": "string"
                 },
                 "first_name": {
-                    "type": "string",
-                    "example": "John"
+                    "type": "string"
                 },
                 "identification_number": {
                     "type": "string",
                     "format": "12345678901"
                 },
                 "last_name": {
-                    "type": "string",
-                    "example": "Doe"
+                    "type": "string"
                 },
                 "phone": {
                     "type": "string",
-                    "format": "05012345678"
+                    "format": "+905012345678"
                 }
             }
         },

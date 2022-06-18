@@ -10,30 +10,22 @@ import (
 )
 
 var (
-	PhoneRegex                = regexp.MustCompile(`^0[.\(\/]5[0-9][0-9][.\)\/][1-9]([0-9]){2}([0-9]){4}$`)
 	IdentificationNumberRegex = regexp.MustCompile(`^[1-9]{1}[0-9]{9}[02468]{1}$`)
-	EmailRegex                = regexp.MustCompile(`^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$`)
 )
 
 type DriverRequest struct {
-	FirstName            string          `json:"first_name" validate:"required" example:"John" binding:"required"`
-	LastName             string          `json:"last_name" validate:"required" example:"Doe" binding:"required"`
-	Email                string          `json:"email" validate:"required" binding:"required"`
-	Phone                string          `json:"phone" validate:"required" binding:"required" format:"05012345678"`
-	Birthday             models.JsonDate `json:"birthday" validate:"required" binding:"required" example:"02-08-2022" format:"02-01-2006"`
-	IdentificationNumber string          `json:"identification_number" binding:"required" validate:"required" format:"12345678901"`
+	FirstName            string          `json:"first_name" validate:"required" binding:"required"`
+	LastName             string          `json:"last_name" validate:"required" binding:"required"`
+	Email                string          `json:"email" validate:"required" binding:"required,email"`
+	Phone                string          `json:"phone" validate:"required" binding:"required,e164" format:"+905012345678"`
+	Birthday             models.JsonDate `json:"birthday" validate:"required" binding:"required" time_format:"02-01-2006" format:"02-01-2006"`
+	IdentificationNumber string          `json:"identification_number" validate:"required" binding:"required" format:"12345678901"`
 }
 
 // Validate validates the driver request.
 func (r *DriverRequest) Validate() error {
-	if match := PhoneRegex.MatchString(r.Phone); !match {
-		return errorHandler.InvalidPhoneNumber
-	}
 	if match := IdentificationNumberRegex.MatchString(r.IdentificationNumber); !match {
 		return errorHandler.InvalidIdentificationNumber
-	}
-	if match := EmailRegex.MatchString(r.Email); !match {
-		return errorHandler.InvalidEmail
 	}
 
 	if !(time.Now().Sub(r.Birthday.ToTime()) > 18*365*24*time.Hour) {

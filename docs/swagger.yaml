@@ -53,22 +53,19 @@ definitions:
   driver.DriverRequest:
     properties:
       birthday:
-        example: 02-08-2022
         format: 02-01-2006
         type: string
       email:
         type: string
       first_name:
-        example: John
         type: string
       identification_number:
         format: "12345678901"
         type: string
       last_name:
-        example: Doe
         type: string
       phone:
-        format: "05012345678"
+        format: "+905012345678"
         type: string
     required:
     - birthday
@@ -496,8 +493,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/reservation.ReservationResponse'
         "400":

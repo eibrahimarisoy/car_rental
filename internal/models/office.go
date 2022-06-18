@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -25,12 +26,17 @@ func (o *Office) GetWorkingDays() []WorkingDay {
 }
 
 // IsAvaliable returns true if the office is available at the given time.
-func (o *Office) IsAvaliable(pickupDate, pickupTime, dropoffDate, dropoffTime time.Time) bool {
+func (o *Office) IsAvaliable(date, time time.Time) bool {
+	dateOK := false
 	for _, wd := range o.WorkingDays {
-		if wd.Value == uint(pickupDate.Weekday()) && o.OpeningHours.ToTime().Before(pickupTime) && o.ClosingHours.ToTime().After(pickupTime) &&
-			wd.Value == uint(dropoffDate.Weekday()) && o.OpeningHours.ToTime().Before(dropoffTime) && o.ClosingHours.ToTime().After(dropoffTime) {
-			return true
+		if wd.Value == uint(date.Weekday()) {
+			dateOK = true
+			break
 		}
+	}
+	if dateOK && o.OpeningHours.ToTime().Before(time) && o.ClosingHours.ToTime().After(time) {
+		fmt.Println("office is available")
+		return true
 	}
 	return false
 }

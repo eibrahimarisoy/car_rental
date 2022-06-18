@@ -125,9 +125,9 @@ func ParseErrors(err error) RestErr {
 	case errors.Is(err, OfficeNotFoundError):
 		return NewRestError(http.StatusNotFound, OfficeNotFoundError.Error(), err)
 	case errors.Is(err, DropoffOfficeNotAvailableError):
-		return NewRestError(http.StatusNotFound, DropoffOfficeNotAvailableError.Error(), err)
+		return NewRestError(http.StatusBadRequest, DropoffOfficeNotAvailableError.Error(), err)
 	case errors.Is(err, PickupOfficeNotAvailableError):
-		return NewRestError(http.StatusNotFound, PickupOfficeNotAvailableError.Error(), err)
+		return NewRestError(http.StatusBadRequest, PickupOfficeNotAvailableError.Error(), err)
 	default:
 		if restErr, ok := err.(RestErr); ok {
 			return restErr
