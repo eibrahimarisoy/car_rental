@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
+	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 	"github.com/google/uuid"
 )
 
@@ -41,4 +42,19 @@ func VendorToResponse(vendor *models.Vendor) *VendorResponse {
 		UpdatedAt: vendor.UpdatedAt,
 	}
 	return vendorResponse
+}
+
+type VendorListResponse struct {
+	pgHelper.Pagination
+	Data []VendorResponse `json:"cars"`
+}
+
+// VendorsToVendorListResponse converts a list of reservations to a reservation list response
+func VendorsToVendorListResponse(reservations *[]models.Vendor, pagination *pgHelper.Pagination) *VendorListResponse {
+	response := &VendorListResponse{}
+	response.Pagination = *pagination
+	for _, reservation := range *reservations {
+		response.Data = append(response.Data, *VendorToResponse(&reservation))
+	}
+	return response
 }

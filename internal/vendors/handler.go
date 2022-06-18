@@ -31,19 +31,19 @@ func NewVendorHandler(r *gin.RouterGroup, vendorService VendorServiceInterface) 
 // @Param        q     query    string  false  "Search query"
 // @Param        page  query    int     false  "Page number"
 // @Param        limit query    int     false  "Page limit"
-// @Success      200  {object}  pagination.Pagination
+// @Success      200  {object}  vendor.VendorListResponse
 // @Failure      500  {object}  _type.APIErrorResponse
 // @Router       /vendors/    [get]
 func (h *VendorHandler) GetVendors(c *gin.Context) {
 	pagination := c.MustGet("pagination").(*paginationHelper.Pagination)
 
-	pagination, err := h.vendorService.GetVendors(pagination)
+	vendors, err := h.vendorService.GetVendors(pagination)
 
 	if err != nil {
 		c.JSON(errorHandler.ErrorResponse(err))
 		return
 	}
-	c.JSON(http.StatusOK, pagination)
+	c.JSON(http.StatusOK, VendorsToVendorListResponse(vendors, pagination))
 }
 
 // CreateVendor is a handler to create a vendor

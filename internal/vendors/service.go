@@ -7,7 +7,7 @@ import (
 
 type VendorServiceInterface interface {
 	CreateVendor(vendor *models.Vendor) (*models.Vendor, error)
-	GetVendors(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	GetVendors(pg *pgHelper.Pagination) (*[]models.Vendor, error)
 }
 
 type VendorService struct {
@@ -22,6 +22,6 @@ func (s *VendorService) CreateVendor(vendor *models.Vendor) (*models.Vendor, err
 	return s.vendorRepo.CreateVendor(vendor)
 }
 
-func (s *VendorService) GetVendors(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
+func (s *VendorService) GetVendors(pg *pgHelper.Pagination) (*[]models.Vendor, error) {
 	return s.vendorRepo.GetVendors(pg)
 }

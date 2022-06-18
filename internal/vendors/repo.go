@@ -8,7 +8,7 @@ import (
 
 type VendorReporsitoryInterface interface {
 	CreateVendor(vendor *models.Vendor) (*models.Vendor, error)
-	GetVendors(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	GetVendors(pg *pgHelper.Pagination) (*[]models.Vendor, error)
 }
 
 type VendorRepository struct {
@@ -30,8 +30,8 @@ func (r *VendorRepository) CreateVendor(vendor *models.Vendor) (*models.Vendor, 
 	return vendor, nil
 }
 
-func (r *VendorRepository) GetVendors(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
-	var vendors []models.Vendor
+func (r *VendorRepository) GetVendors(pg *pgHelper.Pagination) (*[]models.Vendor, error) {
+	var vendors *[]models.Vendor
 	var totalRows int64
 
 	query := r.db.Model(&models.Vendor{}).Scopes(Search(pg.Q)).Count(&totalRows)
@@ -41,7 +41,5 @@ func (r *VendorRepository) GetVendors(pg *pgHelper.Pagination) (*pgHelper.Pagina
 		return nil, query.Error
 	}
 
-	pg.Rows = &vendors
-
-	return pg, nil
+	return vendors, nil
 }
