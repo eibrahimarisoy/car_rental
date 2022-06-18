@@ -40,7 +40,7 @@ func NewCarHandler(r *gin.RouterGroup, carService CarServiceInterface) {
 // @Param		 dropoff_date 	query 	string 	true 	"Dropoff date"
 // @Param		 dropoff_time 	query 	string 	true 	"Dropoff time"
 // @Param		 location_id 	query	string	true 	"UUID formatted ID"
-// @Success      200  {object}  pagination.Pagination
+// @Success      200  {object}  car.CarListResponse
 // @Failure      500  {object}  _type.APIErrorResponse
 // @Router       /cars/    [get]
 func (h *CarHandler) GetAllCars(c *gin.Context) {
@@ -48,13 +48,13 @@ func (h *CarHandler) GetAllCars(c *gin.Context) {
 	filter := c.MustGet("carFilter").(*filterHelper.CarFilter)
 
 	fmt.Println(*filter)
-	pagination, err := h.carService.GetCars(pagination, filter)
+	cars, err := h.carService.GetCars(pagination, filter)
 
 	if err != nil {
 		c.JSON(errorHandler.ErrorResponse(err))
 		return
 	}
-	c.JSON(http.StatusOK, pagination)
+	c.JSON(http.StatusOK, CarsToCarListResponse(cars, pagination))
 }
 
 // CreateCar is a handler to create a car

@@ -33,18 +33,19 @@ func NewReservationHandler(r *gin.RouterGroup, reservationService ReservationSer
 // @Param        q     query    string  false  "Search query"
 // @Param        page  query    int     false  "Page number"
 // @Param        limit query    int     false  "Page limit"
-// @Success      200  {object}  pagination.Pagination
+// @Success      200  {object}  reservation.ReservationListResponse
 // @Failure      500  {object}  _type.APIErrorResponse
 // @Router       /reservations/    [get]
 func (h *ReservationHandler) GetAllReservations(c *gin.Context) {
 	pagination := c.MustGet("pagination").(*paginationHelper.Pagination)
 
-	pagination, err := h.reservationService.GetReservations(pagination)
+	reservations, err := h.reservationService.GetReservations(pagination)
 	if err != nil {
 		c.JSON(errorHandler.ErrorResponse(err))
 		return
 	}
-	c.JSON(http.StatusOK, pagination)
+
+	c.JSON(http.StatusOK, ReservationsToReservationListResponse(reservations, pagination))
 }
 
 // CreateReservation is a handler to create a reservation
@@ -77,9 +78,7 @@ func (h *ReservationHandler) CreateReservation(c *gin.Context) {
 		return
 	}
 
-	reservationResponse := ReservationResponse{}
-	reservationResponse.FromReservation(reservation)
-	c.JSON(http.StatusCreated, reservationResponse)
+	c.JSON(http.StatusCreated, ReservationToResponse(reservation))
 
 	return
 }

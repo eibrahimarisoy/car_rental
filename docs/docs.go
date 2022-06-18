@@ -97,7 +97,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pagination.Pagination"
+                            "$ref": "#/definitions/car.CarListResponse"
                         }
                     },
                     "500": {
@@ -370,7 +370,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/pagination.Pagination"
+                            "$ref": "#/definitions/reservation.ReservationListResponse"
                         }
                     },
                     "500": {
@@ -533,6 +533,33 @@ const docTemplate = `{
                 }
             }
         },
+        "car.CarListResponse": {
+            "type": "object",
+            "properties": {
+                "cars": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/car.CarResponse"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "q": {
+                    "type": "string"
+                },
+                "rows": {},
+                "total_pages": {
+                    "type": "integer"
+                },
+                "total_rows": {
+                    "type": "integer"
+                }
+            }
+        },
         "car.CarRequest": {
             "type": "object",
             "properties": {
@@ -592,6 +619,32 @@ const docTemplate = `{
                 },
                 "vendor": {
                     "$ref": "#/definitions/vendors.VendorResponse"
+                }
+            }
+        },
+        "car.CarSimpleResponse": {
+            "type": "object",
+            "properties": {
+                "fuel": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "office": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "transmission": {
+                    "type": "string"
+                },
+                "vendor": {
+                    "type": "string"
                 }
             }
         },
@@ -756,10 +809,38 @@ const docTemplate = `{
                 }
             }
         },
+        "reservation.ReservationListResponse": {
+            "type": "object",
+            "properties": {
+                "cars": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/reservation.ReservationResponse"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "q": {
+                    "type": "string"
+                },
+                "rows": {},
+                "total_pages": {
+                    "type": "integer"
+                },
+                "total_rows": {
+                    "type": "integer"
+                }
+            }
+        },
         "reservation.ReservationRequest": {
             "type": "object",
             "required": [
                 "car_id",
+                "driver_request",
                 "drop_off_date",
                 "drop_off_time",
                 "dropoff_location_id",
@@ -805,7 +886,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "car": {
-                    "$ref": "#/definitions/car.CarResponse"
+                    "$ref": "#/definitions/car.CarSimpleResponse"
                 },
                 "driver_response": {
                     "$ref": "#/definitions/driver.DriverResponse"

@@ -73,7 +73,5 @@ func (h *OfficeHandler) CreateOffice(c *gin.Context) {
 		return
 	}
 
-	officeResponse := OfficeResponse{}
-	officeResponse.FromOffice(office)
-	c.JSON(http.StatusCreated, officeResponse)
+	c.JSON(http.StatusCreated, OfficeToResponse(office))
 }

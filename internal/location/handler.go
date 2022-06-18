@@ -81,9 +81,7 @@ func (h *LocationHandler) CreateLocation(c *gin.Context) {
 		return
 	}
 
-	locationResponse := LocationResponse{}
-	c.JSON(http.StatusCreated, locationResponse.FromModel(location))
+	c.JSON(http.StatusCreated, LocationToResponse(location))
 
 	return
-
 }

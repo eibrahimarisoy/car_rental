@@ -17,7 +17,7 @@ type ReservationService struct {
 }
 
 type ReservationServiceInterface interface {
-	GetReservations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	GetReservations(pg *pgHelper.Pagination) (*[]models.Reservation, error)
 	CreateReservation(reservation *models.Reservation) (*models.Reservation, error)
 }
 
@@ -35,7 +35,7 @@ func NewReservationService(
 	}
 }
 
-func (s *ReservationService) GetReservations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
+func (s *ReservationService) GetReservations(pg *pgHelper.Pagination) (*[]models.Reservation, error) {
 	return s.reservationRepo.GetReservations(pg)
 }
 

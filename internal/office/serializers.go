@@ -51,19 +51,33 @@ type OfficeResponse struct {
 	WorkingDays  []string                  `json:"working_days"`
 }
 
-// FromOffice converts the Office to OfficeResponse
-func (r *OfficeResponse) FromOffice(office *models.Office) {
+type OfficeSimpleResponse struct {
+	ID           uuid.UUID                 `json:"id"`
+	OpeningHours models.JsonTime           `json:"opening_hours"`
+	ClosingHours models.JsonTime           `json:"closing_hours"`
+	Location     location.LocationResponse `json:"location"`
+}
 
-	r.ID = office.ID
-	r.OpeningHours = office.OpeningHours
-	r.ClosingHours = office.ClosingHours
-
-	r.Vendor = vendors.VendorResponse(r.Vendor)
-	r.Location = location.LocationResponse(r.Location)
-
-	r.WorkingDays = []string{}
-	for _, day := range office.WorkingDays {
-		r.WorkingDays = append(r.WorkingDays, day.Day)
+// OfficeToResponse converts the Office to OfficeResponse
+func OfficeToResponse(office *models.Office) *OfficeResponse {
+	res := OfficeResponse{
+		ID:           office.ID,
+		OpeningHours: office.OpeningHours,
+		ClosingHours: office.ClosingHours,
+		Vendor:       *vendors.VendorToResponse(&office.Vendor),
+		Location:     *location.LocationToResponse(&office.Location),
 	}
 
+	return &res
+}
+
+func OfficeToSimpleResponse(office *models.Office) *OfficeSimpleResponse {
+	res := OfficeSimpleResponse{
+		ID:           office.ID,
+		OpeningHours: office.OpeningHours,
+		ClosingHours: office.ClosingHours,
+		Location:     *location.LocationToResponse(&office.Location),
+	}
+
+	return &res
 }

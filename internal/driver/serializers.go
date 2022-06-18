@@ -64,23 +64,16 @@ type DriverResponse struct {
 	Birthday             string    `json:"birthday"`
 }
 
-// FromDriver converts the driver model to driver response.
-func FromDriver(d *models.Driver) *DriverResponse {
-	id := d.ID
-	firstName := d.FirstName
-	lastName := d.LastName
-	email := d.Email
-	phone := d.Phone
-	identificationNumber := d.IdentificationNumber
-	birthday := d.Birthday
-
-	return &DriverResponse{
-		ID:                   id,
-		FirstName:            *firstName,
-		LastName:             *lastName,
-		Email:                *email,
-		Phone:                *phone,
-		IdentificationNumber: *identificationNumber,
-		Birthday:             birthday.String(),
+// DriverToResponse converts a driver to a response
+func DriverToResponse(driver *models.Driver) *DriverResponse {
+	driverResponse := &DriverResponse{
+		ID:                   driver.ID,
+		FirstName:            *driver.FirstName,
+		LastName:             *driver.LastName,
+		Email:                *driver.Email,
+		Phone:                *driver.Phone,
+		IdentificationNumber: *driver.IdentificationNumber,
+		Birthday:             driver.Birthday.String(),
 	}
+	return driverResponse
 }

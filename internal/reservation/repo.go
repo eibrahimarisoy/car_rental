@@ -9,7 +9,7 @@ import (
 )
 
 type ReservationRepositoryInterface interface {
-	GetReservations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	GetReservations(pg *pgHelper.Pagination) (*[]models.Reservation, error)
 	CreateReservation(reservation *models.Reservation) (*models.Reservation, error)
 }
 
@@ -28,8 +28,8 @@ func (r *ReservationRepository) Migration() {
 }
 
 // GetReservations gets reservations from database with pagination
-func (r *ReservationRepository) GetReservations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
-	var reservations []*models.Reservation
+func (r *ReservationRepository) GetReservations(pg *pgHelper.Pagination) (*[]models.Reservation, error) {
+	var reservations []models.Reservation
 	var totalRows int64
 
 	query := r.db.Model(&models.Reservation{}).Preload(clause.Associations).Count(&totalRows)
@@ -39,8 +39,7 @@ func (r *ReservationRepository) GetReservations(pg *pgHelper.Pagination) (*pgHel
 		return nil, query.Error
 	}
 
-	pg.Rows = &reservations
-	return pg, nil
+	return &reservations, nil
 }
 
 // CreateReservation creates a new reservation in database

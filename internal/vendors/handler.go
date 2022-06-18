@@ -77,9 +77,6 @@ func (h *VendorHandler) CreateVendor(c *gin.Context) {
 		return
 	}
 
-	resBody := &VendorResponse{}
-	resBody.FromVendor(vendor)
-
-	c.JSON(200, resBody)
+	c.JSON(200, VendorToResponse(vendor))
 	return
 }

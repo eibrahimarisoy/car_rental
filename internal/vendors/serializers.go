@@ -32,9 +32,13 @@ type VendorResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (res *VendorResponse) FromVendor(vendor *models.Vendor) {
-	res.ID = vendor.ID
-	res.Name = *vendor.Name
-	res.CreatedAt = vendor.CreatedAt
-	res.UpdatedAt = vendor.UpdatedAt
+// VendorToResponse converts a vendor to a response
+func VendorToResponse(vendor *models.Vendor) *VendorResponse {
+	vendorResponse := &VendorResponse{
+		ID:        vendor.ID,
+		Name:      *vendor.Name,
+		CreatedAt: vendor.CreatedAt,
+		UpdatedAt: vendor.UpdatedAt,
+	}
+	return vendorResponse
 }

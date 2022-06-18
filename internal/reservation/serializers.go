@@ -7,6 +7,7 @@ import (
 	"github.com/eibrahimarisoy/car_rental/internal/driver"
 	"github.com/eibrahimarisoy/car_rental/internal/location"
 	"github.com/eibrahimarisoy/car_rental/internal/models"
+	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 	"github.com/google/uuid"
 )
 
@@ -64,7 +65,7 @@ type ReservationResponse struct {
 	DropoffDate     models.JsonDate           `json:"drop_off_date"`
 	DropoffTime     models.JsonTime           `json:"drop_off_time"`
 
-	Car    car.CarResponse       `json:"car"`
+	Car    car.CarSimpleResponse `json:"car"`
 	Driver driver.DriverResponse `json:"driver_response"`
 }
 
@@ -77,6 +78,37 @@ func (r *ReservationResponse) FromReservation(reservation *models.Reservation) {
 	r.DropoffLocation = location.LocationResponse(r.DropoffLocation)
 	r.DropoffDate = reservation.DropoffDate
 	r.DropoffTime = reservation.DropoffTime
-	r.Car = car.CarResponse(r.Car)
+	r.Car = *car.CarToCarSimpleResponse(&reservation.Car)
 	r.Driver = driver.DriverResponse(r.Driver)
+}
+
+// ReservationToResponse converts a reservation to a response.
+func ReservationToResponse(reservation *models.Reservation) *ReservationResponse {
+	reservationResponse := &ReservationResponse{
+		ID:              reservation.ID,
+		PickupLocation:  *location.LocationToResponse(&reservation.PickupLocation),
+		PickupDate:      reservation.PickupDate,
+		PickupTime:      reservation.PickupTime,
+		DropoffLocation: *location.LocationToResponse(&reservation.DropoffLocation),
+		DropoffDate:     reservation.DropoffDate,
+		DropoffTime:     reservation.DropoffTime,
+		Car:             *car.CarToCarSimpleResponse(&reservation.Car),
+		Driver:          *driver.DriverToResponse(&reservation.Driver),
+	}
+	return reservationResponse
+}
+
+type ReservationListResponse struct {
+	pgHelper.Pagination
+	Cars []ReservationResponse `json:"cars"`
+}
+
+// ReservationsToReservationListResponse converts a list of reservations to a reservation list response
+func ReservationsToReservationListResponse(reservations *[]models.Reservation, pagination *pgHelper.Pagination) *ReservationListResponse {
+	response := &ReservationListResponse{}
+	response.Pagination = *pagination
+	for _, reservation := range *reservations {
+		response.Cars = append(response.Cars, *ReservationToResponse(&reservation))
+	}
+	return response
 }

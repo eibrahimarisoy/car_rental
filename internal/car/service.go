@@ -15,7 +15,7 @@ type CarService struct {
 }
 
 type CarServiceInterface interface {
-	GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter) (*pgHelper.Pagination, error)
+	GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter) (*[]models.Car, error)
 	CreateCar(car *models.Car) (*models.Car, error)
 }
 
@@ -31,7 +31,7 @@ func NewCarService(
 	}
 }
 
-func (s *CarService) GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter) (*pgHelper.Pagination, error) {
+func (s *CarService) GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter) (*[]models.Car, error) {
 	location, err := s.locationRepo.GetLocationByID(filter.Location)
 	if err != nil {
 		return nil, err

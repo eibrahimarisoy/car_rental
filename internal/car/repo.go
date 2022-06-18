@@ -13,7 +13,7 @@ type CarRepositoryInterface interface {
 	CreateCar(car *models.Car) (*models.Car, error)
 	GetCarByID(id uuid.UUID) (*models.Car, error)
 	UpdateCarStatus(car *models.Car) (*models.Car, error)
-	GetCarsByOfficeIDs(pg *pgHelper.Pagination, officeIDs []uuid.UUID) (*pgHelper.Pagination, error)
+	GetCarsByOfficeIDs(pg *pgHelper.Pagination, officeIDs []uuid.UUID) (*[]models.Car, error)
 }
 
 type CarRepository struct {
@@ -62,8 +62,8 @@ func (r *CarRepository) UpdateCarStatus(car *models.Car) (*models.Car, error) {
 }
 
 // GetCarsByOfficeIDs returns a list of cars by office ids
-func (r *CarRepository) GetCarsByOfficeIDs(pg *pgHelper.Pagination, officeIDs []uuid.UUID) (*pgHelper.Pagination, error) {
-	var cars []*models.Car
+func (r *CarRepository) GetCarsByOfficeIDs(pg *pgHelper.Pagination, officeIDs []uuid.UUID) (*[]models.Car, error) {
+	var cars []models.Car
 	var totalRows int64
 
 	query := r.db.Model(&models.Car{}).Preload("Office").Preload("Vendor").
@@ -76,6 +76,6 @@ func (r *CarRepository) GetCarsByOfficeIDs(pg *pgHelper.Pagination, officeIDs []
 	if query.Error != nil {
 		return nil, query.Error
 	}
-	pg.Rows = &cars
-	return pg, nil
+
+	return &cars, nil
 }

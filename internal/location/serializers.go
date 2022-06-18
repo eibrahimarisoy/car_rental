@@ -35,12 +35,13 @@ type LocationResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (r *LocationResponse) FromModel(m *models.Location) *LocationResponse {
-	r.ID = m.ID
-	r.Name = *m.Name
-	r.IsActive = m.IsActive
-	r.CreatedAt = m.CreatedAt
-	r.UpdatedAt = m.UpdatedAt
-
-	return r
+// LocationToResponse converts a location to a response
+func LocationToResponse(location *models.Location) *LocationResponse {
+	return &LocationResponse{
+		ID:        location.ID,
+		Name:      *location.Name,
+		IsActive:  location.IsActive,
+		CreatedAt: location.CreatedAt,
+		UpdatedAt: location.UpdatedAt,
+	}
 }
