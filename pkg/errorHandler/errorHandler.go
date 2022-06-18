@@ -14,25 +14,30 @@ import (
 )
 
 var (
-	InternalServerError         = errors.New("Internal Server Error")
-	NotFound                    = errors.New("Not Found")
-	RequestTimeoutError         = errors.New("Request Timeout")
-	CannotBindGivenData         = errors.New("Could not bind given data")
-	ValidationError             = errors.New("Validation failed for given payload")
-	UniqueError                 = errors.New("Item should be unique on database")
-	Unauthorized                = errors.New("Unauthorized")
-	UnauthorizedError           = errors.New("Unauthorized")
-	GivenAssociationNotFound    = errors.New("Given association not found")
-	RequiredFieldError          = errors.New("Required field is missing")
-	InvalidUUIDFormat           = errors.New("Invalid UUID format")
-	InvalidIdentificationNumber = errors.New("Invalid identification number")
-	InvalidPhoneNumber          = errors.New("Invalid phone number")
-	LocationNoAvailable         = errors.New("Location is not available")
-	InvalidEnumsValue           = errors.New("Invalid enums value")
-	InvalidDateTime             = errors.New("Invalid date time")
-	InvalidDropOffDate          = errors.New("Drop off date must be after pick up date")
-	InvalidEmail                = errors.New("Invalid email")
-	DriverAgeNotValid           = errors.New("Driver age is not valid")
+	InternalServerError            = errors.New("Internal Server Error")
+	NotFound                       = errors.New("Not Found")
+	RequestTimeoutError            = errors.New("Request Timeout")
+	CannotBindGivenData            = errors.New("Could not bind given data")
+	ValidationError                = errors.New("Validation failed for given payload")
+	UniqueError                    = errors.New("Item should be unique on database")
+	Unauthorized                   = errors.New("Unauthorized")
+	UnauthorizedError              = errors.New("Unauthorized")
+	GivenAssociationNotFound       = errors.New("Given association not found")
+	RequiredFieldError             = errors.New("Required field is missing")
+	InvalidUUIDFormat              = errors.New("Invalid UUID format")
+	InvalidIdentificationNumber    = errors.New("Invalid identification number")
+	InvalidPhoneNumber             = errors.New("Invalid phone number")
+	LocationNoAvailable            = errors.New("Location is not available")
+	InvalidEnumsValue              = errors.New("Invalid enums value")
+	InvalidDateTime                = errors.New("Invalid date time")
+	InvalidDropOffDate             = errors.New("Drop off date must be after pick up date")
+	InvalidEmail                   = errors.New("Invalid email")
+	DriverAgeNotValid              = errors.New("Driver age is not valid")
+	CarNotFoundError               = errors.New("Car not found")
+	LocationNotFoundError          = errors.New("Location not found")
+	OfficeNotFoundError            = errors.New("Office not found")
+	DropoffOfficeNotAvailableError = errors.New("Drop off Office is not available")
+	PickupOfficeNotAvailableError  = errors.New("Pick up Office is not available")
 )
 
 type RestError _type.APIErrorResponse
@@ -113,6 +118,16 @@ func ParseErrors(err error) RestErr {
 		return NewRestError(http.StatusBadRequest, InvalidEmail.Error(), err)
 	case errors.Is(err, DriverAgeNotValid):
 		return NewRestError(http.StatusBadRequest, DriverAgeNotValid.Error(), err)
+	case errors.Is(err, CarNotFoundError):
+		return NewRestError(http.StatusNotFound, CarNotFoundError.Error(), err)
+	case errors.Is(err, LocationNotFoundError):
+		return NewRestError(http.StatusNotFound, LocationNotFoundError.Error(), err)
+	case errors.Is(err, OfficeNotFoundError):
+		return NewRestError(http.StatusNotFound, OfficeNotFoundError.Error(), err)
+	case errors.Is(err, DropoffOfficeNotAvailableError):
+		return NewRestError(http.StatusNotFound, DropoffOfficeNotAvailableError.Error(), err)
+	case errors.Is(err, PickupOfficeNotAvailableError):
+		return NewRestError(http.StatusNotFound, PickupOfficeNotAvailableError.Error(), err)
 	default:
 		if restErr, ok := err.(RestErr); ok {
 			return restErr

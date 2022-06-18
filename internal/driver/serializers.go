@@ -20,7 +20,7 @@ type DriverRequest struct {
 	LastName             string          `json:"last_name" validate:"required" example:"Doe" binding:"required"`
 	Email                string          `json:"email" validate:"required" binding:"required"`
 	Phone                string          `json:"phone" validate:"required" binding:"required" format:"05012345678"`
-	Birthday             models.JsonDate `json:"birthday" validate:"required" binding:"required,overyearsold" example:"02-08-2022" format:"02-01-2006"`
+	Birthday             models.JsonDate `json:"birthday" validate:"required" binding:"required" example:"02-08-2022" format:"02-01-2006"`
 	IdentificationNumber string          `json:"identification_number" binding:"required" validate:"required" format:"12345678901"`
 }
 
@@ -36,9 +36,7 @@ func (r *DriverRequest) Validate() error {
 		return errorHandler.InvalidEmail
 	}
 
-	birthday := r.Birthday.ToTime()
-
-	if !(time.Now().Sub(birthday) > 18*365*24*time.Hour) {
+	if !(time.Now().Sub(r.Birthday.ToTime()) > 18*365*24*time.Hour) {
 		return errorHandler.DriverAgeNotValid
 	}
 

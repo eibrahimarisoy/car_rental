@@ -56,7 +56,7 @@ func (h *ReservationHandler) GetAllReservations(c *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        body body    reservation.ReservationRequest  true  "Reservation payload"
-// @Success      200  {object}  reservation.ReservationResponse
+// @Success      201  {object}  reservation.ReservationResponse
 // @Failure	     400  {object}  _type.APIErrorResponse
 // @Failure      500  {object}  _type.APIErrorResponse
 // @Router       /reservations/    [post]
@@ -73,9 +73,7 @@ func (h *ReservationHandler) CreateReservation(c *gin.Context) {
 		return
 	}
 
-	reservation := reqBody.ToReservation()
-
-	reservation, err := h.reservationService.CreateReservation(reservation)
+	reservation, err := h.reservationService.CreateReservation(reqBody.ToReservation())
 	if err != nil {
 		c.JSON(errorHandler.ErrorResponse(err))
 		return
@@ -83,8 +81,7 @@ func (h *ReservationHandler) CreateReservation(c *gin.Context) {
 
 	reservationResponse := ReservationResponse{}
 	reservationResponse.FromReservation(reservation)
-	c.JSON(http.StatusOK, reservationResponse)
+	c.JSON(http.StatusCreated, reservationResponse)
 
 	return
-
 }

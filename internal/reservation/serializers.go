@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// ReservationRequest represents the reservation request.
 type ReservationRequest struct {
 	PickupLocationID uuid.UUID       `json:"pickup_location_id" validate:"required" binding:"required" format:"UUID"`
 	PickUpDate       models.JsonDate `json:"pick_up_date" validate:"required" binding:"required" format:"02-01-2006"`
@@ -52,6 +53,7 @@ func (r *ReservationRequest) ToReservation() *models.Reservation {
 	}
 }
 
+// ReservationResponse represents the reservation response.
 type ReservationResponse struct {
 	ID             uuid.UUID                 `json:"id"`
 	PickupLocation location.LocationResponse `json:"pickup_location"`
