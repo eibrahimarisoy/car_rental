@@ -590,24 +590,38 @@
         },
         "driver.DriverRequest": {
             "type": "object",
+            "required": [
+                "birthday",
+                "email",
+                "first_name",
+                "identification_number",
+                "last_name",
+                "phone"
+            ],
             "properties": {
                 "birthday": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "02-01-2006",
+                    "example": "02-08-2022"
                 },
                 "email": {
                     "type": "string"
                 },
                 "first_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "John"
                 },
                 "identification_number": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "12345678901"
                 },
                 "last_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Doe"
                 },
                 "phone": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "05012345678"
                 }
             }
         },
@@ -740,36 +754,56 @@
         },
         "reservation.ReservationRequest": {
             "type": "object",
+            "required": [
+                "car_id",
+                "drop_off_date",
+                "drop_off_time",
+                "dropoff_location_id",
+                "office_id",
+                "pick_up_date",
+                "pick_up_time",
+                "pickup_location_id",
+                "vendor_id"
+            ],
             "properties": {
                 "car_id": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "UUID"
                 },
                 "driver_request": {
                     "$ref": "#/definitions/driver.DriverRequest"
                 },
                 "drop_off_date": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "02-01-2006"
                 },
                 "drop_off_time": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "15:04"
                 },
                 "dropoff_location_id": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "UUID"
                 },
                 "office_id": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "UUID"
                 },
                 "pick_up_date": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "02-01-2006"
                 },
                 "pick_up_time": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "15:04"
                 },
                 "pickup_location_id": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "UUID"
                 },
                 "vendor_id": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "UUID"
                 }
             }
         },

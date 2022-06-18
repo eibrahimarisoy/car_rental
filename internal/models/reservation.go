@@ -1,62 +1,8 @@
 package models
 
 import (
-	"encoding/json"
-	"fmt"
-	"time"
-
 	"github.com/google/uuid"
 )
-
-type ReservationStatus string
-
-const (
-	ReservationStatusPending   ReservationStatus = "pending"
-	ReservationStatusConfirmed ReservationStatus = "confirmed"
-	ReservationStatusCancelled ReservationStatus = "cancelled"
-)
-const dateFormat = "02-01-2006"
-
-type JsonDate time.Time
-
-func (t JsonDate) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + time.Time(t).Format(dateFormat) + `"`), nil
-}
-
-func (t *JsonDate) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
-		return err
-	}
-	t2, err := time.Parse(dateFormat, s)
-	if err != nil {
-		return err
-	}
-	*t = JsonDate(t2)
-	return nil
-}
-
-func (t JsonDate) String() string {
-	return time.Time(t).Format(dateFormat)
-}
-
-// ToTime converts JsonDate to time.Time
-func (t JsonDate) ToTime() time.Time {
-	fmt.Println(t)
-	fmt.Println(time.Time(t))
-	return time.Time(t)
-}
-
-// FromTime converts time.Time to JsonDate
-func (t JsonDate) FromTime(t2 time.Time) JsonDate {
-	return JsonDate(t2)
-}
-
-// FromString converts string to JsonDate
-func (t JsonDate) FromString(s string) JsonDate {
-	t2, _ := time.Parse(dateFormat, s)
-	return JsonDate(t2)
-}
 
 type Reservation struct {
 	Base

@@ -26,8 +26,11 @@ var (
 	RequiredFieldError          = errors.New("Required field is missing")
 	InvalidUUIDFormat           = errors.New("Invalid UUID format")
 	InvalidIdentificationNumber = errors.New("Invalid identification number")
+	InvalidPhoneNumber          = errors.New("Invalid phone number")
 	LocationNoAvailable         = errors.New("Location is not available")
 	InvalidEnumsValue           = errors.New("Invalid enums value")
+	InvalidDateTime             = errors.New("Invalid date time")
+	InvalidDropOffDate          = errors.New("Drop off date must be after pick up date")
 )
 
 type RestError _type.APIErrorResponse
@@ -98,7 +101,12 @@ func ParseErrors(err error) RestErr {
 		return NewRestError(http.StatusBadRequest, LocationNoAvailable.Error(), err)
 	case errors.Is(err, InvalidEnumsValue):
 		return NewRestError(http.StatusBadRequest, InvalidEnumsValue.Error(), err)
-
+	case errors.Is(err, InvalidPhoneNumber):
+		return NewRestError(http.StatusBadRequest, InvalidPhoneNumber.Error(), err)
+	case strings.Contains(err.Error(), "parsing time"):
+		return NewRestError(http.StatusBadRequest, InvalidDateTime.Error(), err)
+	case strings.Contains(err.Error(), "drop_off_date must be after pick_up_date"):
+		return NewRestError(http.StatusBadRequest, InvalidDropOffDate.Error(), err)
 	default:
 		if restErr, ok := err.(RestErr); ok {
 			return restErr

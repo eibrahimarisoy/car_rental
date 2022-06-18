@@ -2,7 +2,6 @@ package reservation
 
 import (
 	"errors"
-	"time"
 
 	"github.com/eibrahimarisoy/car_rental/internal/car"
 	"github.com/eibrahimarisoy/car_rental/internal/driver"
@@ -14,50 +13,28 @@ import (
 )
 
 type ReservationRequest struct {
-	PickupLocationID uuid.UUID       `json:"pickup_location_id"`
-	PickUpDate       models.JsonDate `json:"pick_up_date"`
-	PickUpTime       models.JsonTime `json:"pick_up_time"`
+	PickupLocationID uuid.UUID       `json:"pickup_location_id" validate:"required" binding:"required" format:"UUID"`
+	PickUpDate       models.JsonDate `json:"pick_up_date" validate:"required" binding:"required" format:"02-01-2006"`
+	PickUpTime       models.JsonTime `json:"pick_up_time" validate:"required" binding:"required" format:"15:04"`
 
-	DropoffLocationID uuid.UUID       `json:"dropoff_location_id"`
-	DropOffDate       models.JsonDate `json:"drop_off_date"`
-	DropOffTime       models.JsonTime `json:"drop_off_time"`
+	DropoffLocationID uuid.UUID       `json:"dropoff_location_id" validate:"required" binding:"required" format:"UUID"`
+	DropOffDate       models.JsonDate `json:"drop_off_date" validate:"required" binding:"required" format:"02-01-2006"`
+	DropOffTime       models.JsonTime `json:"drop_off_time" validate:"required" binding:"required" format:"15:04"`
 
-	VendorID uuid.UUID `json:"vendor_id"`
-	OfficeID uuid.UUID `json:"office_id"`
-	CarID    uuid.UUID `json:"car_id"`
+	VendorID uuid.UUID `json:"vendor_id" validate:"required" binding:"required" format:"UUID"`
+	OfficeID uuid.UUID `json:"office_id" validate:"required" binding:"required" format:"UUID"`
+	CarID    uuid.UUID `json:"car_id" validate:"required" binding:"required" format:"UUID"`
 
 	Driver driver.DriverRequest `json:"driver_request"`
 }
 
 // Validate validates the reservation request.
 func (r *ReservationRequest) Validate() error {
-	if r.PickupLocationID == uuid.Nil {
-		return errors.New("required data")
+
+	if drop_off_date := r.DropOffDate.ToTime(); drop_off_date.Before(r.PickUpDate.ToTime()) {
+		return errors.New("drop_off_date must be after pick_up_date")
 	}
-	if r.PickUpDate == models.JsonDate(time.Time{}) {
-		return errors.New("required data")
-	}
-	if r.PickUpTime == models.JsonTime(time.Time{}) {
-		return errors.New("required data")
-	}
-	if r.DropoffLocationID == uuid.Nil {
-		return errors.New("required data")
-	}
-	if r.DropOffDate == models.JsonDate(time.Time{}) {
-		return errors.New("required data")
-	}
-	if r.DropOffTime == models.JsonTime(time.Time{}) {
-		return errors.New("required data")
-	}
-	if r.VendorID == uuid.Nil {
-		return errors.New("required data")
-	}
-	if r.OfficeID == uuid.Nil {
-		return errors.New("required data")
-	}
-	if r.CarID == uuid.Nil {
-		return errors.New("required data")
-	}
+
 	if err := r.Driver.Validate(); err != nil {
 		return err
 	}

@@ -53,17 +53,30 @@ definitions:
   driver.DriverRequest:
     properties:
       birthday:
+        example: 02-08-2022
+        format: 02-01-2006
         type: string
       email:
         type: string
       first_name:
+        example: John
         type: string
       identification_number:
+        format: "12345678901"
         type: string
       last_name:
+        example: Doe
         type: string
       phone:
+        format: "05012345678"
         type: string
+    required:
+    - birthday
+    - email
+    - first_name
+    - identification_number
+    - last_name
+    - phone
     type: object
   driver.DriverResponse:
     properties:
@@ -151,25 +164,44 @@ definitions:
   reservation.ReservationRequest:
     properties:
       car_id:
+        format: UUID
         type: string
       driver_request:
         $ref: '#/definitions/driver.DriverRequest'
       drop_off_date:
+        format: 02-01-2006
         type: string
       drop_off_time:
+        format: "15:04"
         type: string
       dropoff_location_id:
+        format: UUID
         type: string
       office_id:
+        format: UUID
         type: string
       pick_up_date:
+        format: 02-01-2006
         type: string
       pick_up_time:
+        format: "15:04"
         type: string
       pickup_location_id:
+        format: UUID
         type: string
       vendor_id:
+        format: UUID
         type: string
+    required:
+    - car_id
+    - drop_off_date
+    - drop_off_time
+    - dropoff_location_id
+    - office_id
+    - pick_up_date
+    - pick_up_time
+    - pickup_location_id
+    - vendor_id
     type: object
   reservation.ReservationResponse:
     properties:
