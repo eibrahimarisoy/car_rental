@@ -1,13 +1,13 @@
 package car
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
+	filterHelper "github.com/eibrahimarisoy/car_rental/pkg/filters"
 	mw "github.com/eibrahimarisoy/car_rental/pkg/middlewares"
 	paginationHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
-	"github.com/google/uuid"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +21,7 @@ func NewCarHandler(r *gin.RouterGroup, carService CarServiceInterface) {
 		carService: carService,
 	}
 
-	r.GET("/", mw.PaginationMiddleware(), handler.GetAllCars)
+	r.GET("/", mw.PaginationMiddleware(), mw.CarFilterMiddleware(), handler.GetAllCars)
 	r.POST("/", handler.CreateCar)
 
 }
@@ -45,37 +45,9 @@ func NewCarHandler(r *gin.RouterGroup, carService CarServiceInterface) {
 // @Router       /cars/    [get]
 func (h *CarHandler) GetAllCars(c *gin.Context) {
 	pagination := c.MustGet("pagination").(*paginationHelper.Pagination)
-	filter := &CarFilter{}
-	date := models.JsonDate{}
-	time := models.JsonTime{}
+	filter := c.MustGet("carFilter").(*filterHelper.CarFilter)
 
-	date = date.FromString(c.Query("pickup_date"))
-	filter.PickupDate = date
-
-	time = time.FromString(c.Query("pickup_time"))
-	filter.PickupTime = time
-
-	date = date.FromString(c.Query("dropoff_date"))
-	filter.DropoffDate = date
-
-	time = time.FromString(c.Query("dropoff_time"))
-	filter.DropoffTime = time
-
-	locationId := c.Query("location_id")
-	if locationId != "" {
-		location, err := uuid.Parse(c.Query("location_id"))
-		if err != nil {
-			c.JSON(errorHandler.ErrorResponse(err))
-			return
-		}
-		filter.Location = location
-	}
-
-	if err := filter.Validate(); err != nil {
-		c.JSON(errorHandler.ErrorResponse(err))
-		return
-	}
-
+	fmt.Println(*filter)
 	pagination, err := h.carService.GetCars(pagination, filter)
 
 	if err != nil {

@@ -1,7 +1,6 @@
 package office
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
@@ -63,7 +62,6 @@ func (r *OfficeRepository) CreateOffice(office *models.Office) (*models.Office, 
 
 	office.WorkingDays = workingDays
 	if res := tx.Model(&office).Create(office); res.Error != nil {
-		fmt.Println(res.Error)
 		tx.Rollback()
 		return nil, res.Error
 	}

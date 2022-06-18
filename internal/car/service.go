@@ -4,6 +4,7 @@ import (
 	"github.com/eibrahimarisoy/car_rental/internal/location"
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/eibrahimarisoy/car_rental/internal/office"
+	"github.com/eibrahimarisoy/car_rental/pkg/filters"
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 )
 
@@ -14,7 +15,7 @@ type CarService struct {
 }
 
 type CarServiceInterface interface {
-	GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error)
+	GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter) (*pgHelper.Pagination, error)
 	CreateCar(car *models.Car) (*models.Car, error)
 }
 
@@ -30,7 +31,7 @@ func NewCarService(
 	}
 }
 
-func (s *CarService) GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error) {
+func (s *CarService) GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter) (*pgHelper.Pagination, error) {
 	location, err := s.locationRepo.GetLocationByID(filter.Location)
 	if err != nil {
 		return nil, err

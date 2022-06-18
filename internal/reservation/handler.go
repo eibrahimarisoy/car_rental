@@ -1,7 +1,6 @@
 package reservation
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
@@ -41,7 +40,6 @@ func (h *ReservationHandler) GetAllReservations(c *gin.Context) {
 	pagination := c.MustGet("pagination").(*paginationHelper.Pagination)
 
 	pagination, err := h.reservationService.GetReservations(pagination)
-	fmt.Println(err)
 	if err != nil {
 		c.JSON(errorHandler.ErrorResponse(err))
 		return

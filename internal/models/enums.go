@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
 )
 
@@ -41,8 +40,6 @@ func (t JsonDate) String() string {
 
 // ToTime converts JsonDate to time.Time
 func (t JsonDate) ToTime() time.Time {
-	fmt.Println(t)
-	fmt.Println(time.Time(t))
 	return time.Time(t)
 }
 
