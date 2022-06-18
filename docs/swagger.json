@@ -49,6 +49,41 @@
                         "description": "Page limit",
                         "name": "limit",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Pickup date",
+                        "name": "pickup_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Pickup time",
+                        "name": "pickup_time",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Dropoff date",
+                        "name": "dropoff_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Dropoff time",
+                        "name": "dropoff_time",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "uuid formatted ID",
+                        "name": "location_id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {

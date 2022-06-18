@@ -29,7 +29,6 @@ func (r *CarRepository) Migration() {
 	r.db.AutoMigrate(&models.Car{})
 }
 
-// TODO
 func (r *CarRepository) GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error) {
 	location := models.Location{}
 	locationId := filter.Location
@@ -73,8 +72,6 @@ func (r *CarRepository) GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pg
 	pg.Rows = &cars
 	return pg, nil
 }
-
-// TODO
 
 func (r *CarRepository) CreateCar(car *models.Car) (*models.Car, error) {
 

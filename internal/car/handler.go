@@ -32,9 +32,14 @@ func NewCarHandler(r *gin.RouterGroup, carService CarServiceInterface) {
 // @Tags         car
 // @Accept       json
 // @Produce      json
-// @Param        q     query    string  false  "Search query"
-// @Param        page  query    int     false  "Page number"
-// @Param        limit query    int     false  "Page limit"
+// @Param        q     			query   string  false  	"Search query"
+// @Param        page  			query   int     false  	"Page number"
+// @Param        limit 			query   int     false  	"Page limit"
+// @Param		 pickup_date 	query 	string 	true 	"Pickup date"
+// @Param		 pickup_time 	query 	string 	true 	"Pickup time"
+// @Param		 dropoff_date 	query 	string 	true 	"Dropoff date"
+// @Param		 dropoff_time 	query 	string 	true 	"Dropoff time"
+// @Param		 location_id 	query	string	true 	"UUID formatted ID"
 // @Success      200  {object}  pagination.Pagination
 // @Failure      500  {object}  _type.APIErrorResponse
 // @Router       /cars/    [get]

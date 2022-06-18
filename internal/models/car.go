@@ -5,6 +5,14 @@ import "github.com/google/uuid"
 type FuelEnums string
 type TransmissionEnums string
 
+func (f *FuelEnums) String() string {
+	return string(*f)
+}
+
+func (t *TransmissionEnums) String() string {
+	return string(*t)
+}
+
 const (
 	Gas      FuelEnums = "gas"
 	Diesel   FuelEnums = "diesel"
@@ -25,12 +33,4 @@ type Car struct {
 
 	OfficeID uuid.UUID `json:"office_id" gorm:"not null"`
 	Office   Office    `json:"office" gorm:"foreignkey:OfficeID"`
-}
-
-func (f *FuelEnums) String() string {
-	return string(*f)
-}
-
-func (t *TransmissionEnums) String() string {
-	return string(*t)
 }

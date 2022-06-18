@@ -9,6 +9,10 @@ RUN go mod download
 COPY . .
 # Install air for development
 RUN go install github.com/cosmtrek/air@latest
+
+RUN go get -u github.com/swaggo/swag/cmd/swag
+RUN export PATH=$(go env GOPATH)/bin:$PATH
+
 # Expose port
 EXPOSE 8080
 # Start app
