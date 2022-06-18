@@ -25,5 +25,11 @@ func (s *OfficeService) GetOffices(pg *pgHelper.Pagination) (*pgHelper.Paginatio
 }
 
 func (s *OfficeService) CreateOffice(office *models.Office) (*models.Office, error) {
+	workingDays, err := s.officeRepo.GetWorkingDaysByValues(&office.WorkingDays)
+	if err != nil {
+		return nil, err
+	}
+	office.WorkingDays = *workingDays
 	return s.officeRepo.CreateOffice(office)
+
 }

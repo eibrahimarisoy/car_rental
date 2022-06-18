@@ -26,10 +26,12 @@ func NewCarRepository(db *gorm.DB) *CarRepository {
 	}
 }
 
+// Migrations for car table
 func (r *CarRepository) Migration() {
 	r.db.AutoMigrate(&models.Car{})
 }
 
+// CreateCar creates a car and returns it
 func (r *CarRepository) CreateCar(car *models.Car) (*models.Car, error) {
 
 	if err := r.db.Create(car).Error; err != nil {
@@ -67,7 +69,7 @@ func (r *CarRepository) GetCarsByOfficeIDs(pg *pgHelper.Pagination, officeIDs []
 	query := r.db.Model(&models.Car{}).Preload("Office").Preload("Vendor").
 		Where(
 			"status = ? AND office_id IN ?", models.CarStatusAvailable, officeIDs,
-		).Find(&cars).Scopes().Count(&totalRows)
+		).Find(&cars).Count(&totalRows)
 
 	query.Scopes(pgHelper.Paginate(totalRows, pg, r.db)).Find(&cars)
 

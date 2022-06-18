@@ -29,6 +29,7 @@ func (r *LocationRepository) Migration() {
 	r.db.AutoMigrate(&models.Location{})
 }
 
+// GetAllActiveLocations gets all active locations from database
 func (r *LocationRepository) GetAllActiveLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
 	var locations []*models.Location
 	var totalRows int64
@@ -44,6 +45,7 @@ func (r *LocationRepository) GetAllActiveLocations(pg *pgHelper.Pagination) (*pg
 	return pg, nil
 }
 
+// CreateLocation creates a location and returns it
 func (r *LocationRepository) CreateLocation(location *models.Location) (*models.Location, error) {
 
 	if err := r.db.Create(location).Error; err != nil {

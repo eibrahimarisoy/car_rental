@@ -16,6 +16,7 @@ type OfficeRepositoryInterface interface {
 	CreateOffice(office *models.Office) (*models.Office, error)
 	FindByOfficeAndVendorID(officeID, vendorID uuid.UUID) (*models.Office, error)
 	GetOfficeIDs(locationId uuid.UUID, pickupWeekDay, dropoffWeekDay int, pickupTime, dropoffTime time.Time) ([]uuid.UUID, error)
+	GetWorkingDaysByValues(workingDays *[]models.WorkingDay) (*[]models.WorkingDay, error)
 }
 
 type OfficeRepository struct {
@@ -31,43 +32,6 @@ func NewOfficeRepository(db *gorm.DB) *OfficeRepository {
 func (r *OfficeRepository) Migration() {
 	r.db.AutoMigrate(&models.Office{})
 	r.LoadWorkingDay()
-}
-
-// GetOffices returns all offices
-func (r *OfficeRepository) GetOffices(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
-	var offices []models.Office
-	var totalRows int64
-
-	query := r.db.Model(&models.Office{}).Preload("Location").Preload("Vendor").Count(&totalRows)
-	query.Scopes(pgHelper.Paginate(totalRows, pg, r.db)).Find(&offices)
-
-	if query.Error != nil {
-		return nil, query.Error
-	}
-
-	pg.Rows = &offices
-	return pg, nil
-
-}
-
-// CreateOffice creates a new office
-func (r *OfficeRepository) CreateOffice(office *models.Office) (*models.Office, error) {
-	tx := r.db.Begin()
-	workingDays := []models.WorkingDay{}
-
-	for _, item := range office.WorkingDays {
-		r.db.First(&item, "value = ?", item.Value)
-		workingDays = append(workingDays, item)
-	}
-
-	office.WorkingDays = workingDays
-	if res := tx.Model(&office).Create(office); res.Error != nil {
-		tx.Rollback()
-		return nil, res.Error
-	}
-
-	tx.Commit()
-	return office, nil
 }
 
 // CreateWorkingDay creates a new working day
@@ -89,6 +53,33 @@ func (r *OfficeRepository) LoadWorkingDay() error {
 	}
 
 	return nil
+}
+
+// GetOffices returns all offices
+func (r *OfficeRepository) GetOffices(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
+	var offices []models.Office
+	var totalRows int64
+
+	query := r.db.Model(&models.Office{}).Preload("Location").Preload("Vendor").Count(&totalRows)
+	query.Scopes(pgHelper.Paginate(totalRows, pg, r.db)).Find(&offices)
+
+	if query.Error != nil {
+		return nil, query.Error
+	}
+
+	pg.Rows = &offices
+	return pg, nil
+
+}
+
+// CreateOffice creates a new office
+func (r *OfficeRepository) CreateOffice(office *models.Office) (*models.Office, error) {
+
+	if res := r.db.Model(&office).Create(office); res.Error != nil {
+		return nil, res.Error
+	}
+
+	return office, nil
 }
 
 // FindByOfficeAndVendorID returns a office by office id and vendor id
@@ -122,4 +113,15 @@ func (r *OfficeRepository) GetOfficeIDs(
 	}
 
 	return officeIDs, nil
+}
+
+// GetWorkingDaysByValues returns a working day by value
+func (r *OfficeRepository) GetWorkingDaysByValues(workingDays *[]models.WorkingDay) (*[]models.WorkingDay, error) {
+	// var workingDays []models.WorkingDay
+	res := r.db.Model(&models.WorkingDay{}).Find(workingDays)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return workingDays, nil
 }
