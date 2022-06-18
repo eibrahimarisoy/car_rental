@@ -13,6 +13,8 @@ import (
 type CarRepositoryInterface interface {
 	GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error)
 	CreateCar(car *models.Car) (*models.Car, error)
+	GetCarByID(id uuid.UUID) (*models.Car, error)
+	UpdateCarStatus(car *models.Car) (*models.Car, error)
 }
 
 type CarRepository struct {
@@ -77,6 +79,25 @@ func (r *CarRepository) CreateCar(car *models.Car) (*models.Car, error) {
 
 	if err := r.db.Create(car).Error; err != nil {
 		return nil, err
+	}
+	return car, nil
+}
+
+// GetCarByID returns a car by id
+func (r *CarRepository) GetCarByID(id uuid.UUID) (*models.Car, error) {
+	car := models.Car{}
+	res := r.db.Model(&models.Car{}).Where("status = ? AND id = ?", models.CarStatusAvailable, id).First(&car)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return &car, nil
+}
+
+// UpdateCarStatus updates a car status
+func (r *CarRepository) UpdateCarStatus(car *models.Car) (*models.Car, error) {
+	res := r.db.Model(&models.Car{}).Where("id = ?", car.ID).Update("status", car.Status)
+	if res.Error != nil {
+		return nil, res.Error
 	}
 	return car, nil
 }

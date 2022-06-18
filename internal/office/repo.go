@@ -4,7 +4,9 @@ import (
 	"fmt"
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
+	"github.com/google/uuid"
 
+	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 	"gorm.io/gorm"
 )
@@ -12,6 +14,7 @@ import (
 type OfficeRepositoryInterface interface {
 	GetOffices(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
 	CreateOffice(office *models.Office) (*models.Office, error)
+	FindByOfficeAndVendorID(officeID, vendorID uuid.UUID) (*models.Office, error)
 }
 
 type OfficeRepository struct {
@@ -86,4 +89,17 @@ func (r *OfficeRepository) LoadWorkingDay() error {
 	}
 
 	return nil
+}
+
+// FindByOfficeAndVendorID returns a office by office id and vendor id
+func (r *OfficeRepository) FindByOfficeAndVendorID(officeID, vendorID uuid.UUID) (*models.Office, error) {
+	var office models.Office
+	query := r.db.Model(&models.Office{}).Preload("WorkingDays").Where("id = ? AND vendor_id = ?", officeID, vendorID).First(&office)
+	if query.Error == gorm.ErrRecordNotFound {
+		return nil, errorHandler.OfficeNotFoundError
+	} else if query.Error != nil {
+		return nil, query.Error
+	}
+
+	return &office, nil
 }

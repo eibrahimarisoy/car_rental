@@ -54,7 +54,7 @@ func InitiliazeRoutes(rootRouter *gin.RouterGroup, db *gorm.DB, cfg *config.Conf
 	reservationRepo := reservation.NewReservationRepository(db)
 	reservationRepo.Migration()
 
-	reservationService := reservation.NewReservationService(reservationRepo)
+	reservationService := reservation.NewReservationService(reservationRepo, carRepo, officeRepo, locationRepo)
 	reservation.NewReservationHandler(reservationGroup, reservationService)
 
 }
