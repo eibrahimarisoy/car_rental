@@ -7,8 +7,6 @@ import (
 	"github.com/eibrahimarisoy/car_rental/internal/driver"
 	"github.com/eibrahimarisoy/car_rental/internal/location"
 	"github.com/eibrahimarisoy/car_rental/internal/models"
-	"github.com/eibrahimarisoy/car_rental/internal/office"
-	"github.com/eibrahimarisoy/car_rental/internal/vendors"
 	"github.com/google/uuid"
 )
 
@@ -21,9 +19,7 @@ type ReservationRequest struct {
 	DropOffDate       models.JsonDate `json:"drop_off_date" validate:"required" binding:"required" format:"02-01-2006"`
 	DropOffTime       models.JsonTime `json:"drop_off_time" validate:"required" binding:"required" format:"15:04"`
 
-	VendorID uuid.UUID `json:"vendor_id" validate:"required" binding:"required" format:"UUID"`
-	OfficeID uuid.UUID `json:"office_id" validate:"required" binding:"required" format:"UUID"`
-	CarID    uuid.UUID `json:"car_id" validate:"required" binding:"required" format:"UUID"`
+	CarID uuid.UUID `json:"car_id" validate:"required" binding:"required" format:"UUID"`
 
 	Driver driver.DriverRequest `json:"driver_request"`
 }
@@ -50,10 +46,9 @@ func (r *ReservationRequest) ToReservation() *models.Reservation {
 		DropoffLocationID: r.DropoffLocationID,
 		DropoffDate:       r.DropOffDate,
 		DropoffTime:       r.DropOffTime,
-		VendorID:          r.VendorID,
-		OfficeID:          r.OfficeID,
-		CarID:             r.CarID,
-		Driver:            *r.Driver.ToDriver(),
+
+		CarID:  r.CarID,
+		Driver: *r.Driver.ToDriver(),
 	}
 }
 
@@ -67,10 +62,8 @@ type ReservationResponse struct {
 	DropoffDate     models.JsonDate           `json:"drop_off_date"`
 	DropoffTime     models.JsonTime           `json:"drop_off_time"`
 
-	Vendor vendors.VendorResponse `json:"vendor"`
-	Office office.OfficeResponse  `json:"office"`
-	Car    car.CarResponse        `json:"car"`
-	Driver driver.DriverResponse  `json:"driver_response"`
+	Car    car.CarResponse       `json:"car"`
+	Driver driver.DriverResponse `json:"driver_response"`
 }
 
 // FromReservation converts the reservation model to reservation response.
@@ -82,8 +75,6 @@ func (r *ReservationResponse) FromReservation(reservation *models.Reservation) {
 	r.DropoffLocation = location.LocationResponse(r.DropoffLocation)
 	r.DropoffDate = reservation.DropoffDate
 	r.DropoffTime = reservation.DropoffTime
-	r.Vendor = vendors.VendorResponse(r.Vendor)
-	r.Office = office.OfficeResponse(r.Office)
 	r.Car = car.CarResponse(r.Car)
 	r.Driver = driver.DriverResponse(r.Driver)
 }

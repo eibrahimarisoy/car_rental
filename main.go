@@ -11,8 +11,6 @@ import (
 	graceful "github.com/eibrahimarisoy/car_rental/pkg/graceful"
 	router "github.com/eibrahimarisoy/car_rental/pkg/router"
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
-	"github.com/go-playground/validator/v10"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
@@ -39,10 +37,6 @@ func main() {
 	DB := db.NewPsqlDB(cfg)
 
 	r := gin.Default()
-
-	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterValidation("overyearsold", over18YearsOld)
-	}
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", cfg.ServerConfig.Port),
@@ -82,13 +76,4 @@ func main() {
 
 	// Wait for interrupt signal to gracefully shutdown the server with
 	graceful.ShutdownGin(srv, time.Duration(cfg.ServerConfig.TimeoutSecs*int64(time.Second)))
-}
-
-var over18YearsOld validator.Func = func(fl validator.FieldLevel) bool {
-	fmt.Println("over18YearsOld")
-	birthday, err := time.Parse("02-01-2006", fl.Field().String())
-	if err != nil {
-		return false
-	}
-	return time.Now().Sub(birthday) > 18*365*24*time.Hour
 }

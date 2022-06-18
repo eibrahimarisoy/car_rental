@@ -1,7 +1,6 @@
 package driver
 
 import (
-	"errors"
 	"regexp"
 	"time"
 
@@ -13,6 +12,7 @@ import (
 var (
 	PhoneRegex                = regexp.MustCompile(`^0[.\(\/]5[0-9][0-9][.\)\/][1-9]([0-9]){2}([0-9]){4}$`)
 	IdentificationNumberRegex = regexp.MustCompile(`^[1-9]{1}[0-9]{9}[02468]{1}$`)
+	EmailRegex                = regexp.MustCompile(`^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$`)
 )
 
 type DriverRequest struct {
@@ -32,9 +32,16 @@ func (r *DriverRequest) Validate() error {
 	if match := IdentificationNumberRegex.MatchString(r.IdentificationNumber); !match {
 		return errorHandler.InvalidIdentificationNumber
 	}
-	if r.Birthday == models.JsonDate(time.Time{}) {
-		return errors.New("required data")
+	if match := EmailRegex.MatchString(r.Email); !match {
+		return errorHandler.InvalidEmail
 	}
+
+	birthday := r.Birthday.ToTime()
+
+	if !(time.Now().Sub(birthday) > 18*365*24*time.Hour) {
+		return errorHandler.DriverAgeNotValid
+	}
+
 	return nil
 }
 

@@ -177,9 +177,6 @@ definitions:
       dropoff_location_id:
         format: UUID
         type: string
-      office_id:
-        format: UUID
-        type: string
       pick_up_date:
         format: 02-01-2006
         type: string
@@ -189,19 +186,14 @@ definitions:
       pickup_location_id:
         format: UUID
         type: string
-      vendor_id:
-        format: UUID
-        type: string
     required:
     - car_id
     - drop_off_date
     - drop_off_time
     - dropoff_location_id
-    - office_id
     - pick_up_date
     - pick_up_time
     - pickup_location_id
-    - vendor_id
     type: object
   reservation.ReservationResponse:
     properties:
@@ -217,16 +209,12 @@ definitions:
         $ref: '#/definitions/location.LocationResponse'
       id:
         type: string
-      office:
-        $ref: '#/definitions/office.OfficeResponse'
       pick_up_date:
         type: string
       pick_up_time:
         type: string
       pickup_location:
         $ref: '#/definitions/location.LocationResponse'
-      vendor:
-        $ref: '#/definitions/vendors.VendorResponse'
     type: object
   vendors.VendorRequest:
     properties:

@@ -82,7 +82,7 @@ func (r *OfficeRepository) LoadWorkingDay() error {
 	}
 
 	for _, item := range workingDays {
-		r.db.Model(&workingDay).Create(&item)
+		r.db.Model(&workingDay).FirstOrCreate(&item)
 	}
 
 	return nil

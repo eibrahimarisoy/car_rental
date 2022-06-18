@@ -31,6 +31,8 @@ var (
 	InvalidEnumsValue           = errors.New("Invalid enums value")
 	InvalidDateTime             = errors.New("Invalid date time")
 	InvalidDropOffDate          = errors.New("Drop off date must be after pick up date")
+	InvalidEmail                = errors.New("Invalid email")
+	DriverAgeNotValid           = errors.New("Driver age is not valid")
 )
 
 type RestError _type.APIErrorResponse
@@ -107,6 +109,10 @@ func ParseErrors(err error) RestErr {
 		return NewRestError(http.StatusBadRequest, InvalidDateTime.Error(), err)
 	case strings.Contains(err.Error(), "drop_off_date must be after pick_up_date"):
 		return NewRestError(http.StatusBadRequest, InvalidDropOffDate.Error(), err)
+	case errors.Is(err, InvalidEmail):
+		return NewRestError(http.StatusBadRequest, InvalidEmail.Error(), err)
+	case errors.Is(err, DriverAgeNotValid):
+		return NewRestError(http.StatusBadRequest, DriverAgeNotValid.Error(), err)
 	default:
 		if restErr, ok := err.(RestErr); ok {
 			return restErr

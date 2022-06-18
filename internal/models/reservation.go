@@ -20,12 +20,6 @@ type Reservation struct {
 	DropoffDate JsonDate `json:"dropoff_date"`
 	DropoffTime JsonTime `json:"dropoff_time"`
 
-	VendorID uuid.UUID `json:"vendor_id"`
-	Vendor   Vendor    `json:"vendor" gorm:"foreignkey:VendorID"`
-
-	OfficeID uuid.UUID `json:"office_id"`
-	Office   Office    `json:"office" gorm:"foreignkey:OfficeID"`
-
 	DriverID uuid.UUID `json:"driver_id"`
 	Driver   Driver    `json:"driver" gorm:"foreignkey:DriverID"`
 

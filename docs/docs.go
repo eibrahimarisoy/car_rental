@@ -766,11 +766,9 @@ const docTemplate = `{
                 "drop_off_date",
                 "drop_off_time",
                 "dropoff_location_id",
-                "office_id",
                 "pick_up_date",
                 "pick_up_time",
-                "pickup_location_id",
-                "vendor_id"
+                "pickup_location_id"
             ],
             "properties": {
                 "car_id": {
@@ -792,10 +790,6 @@ const docTemplate = `{
                     "type": "string",
                     "format": "UUID"
                 },
-                "office_id": {
-                    "type": "string",
-                    "format": "UUID"
-                },
                 "pick_up_date": {
                     "type": "string",
                     "format": "02-01-2006"
@@ -805,10 +799,6 @@ const docTemplate = `{
                     "format": "15:04"
                 },
                 "pickup_location_id": {
-                    "type": "string",
-                    "format": "UUID"
-                },
-                "vendor_id": {
                     "type": "string",
                     "format": "UUID"
                 }
@@ -835,9 +825,6 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "office": {
-                    "$ref": "#/definitions/office.OfficeResponse"
-                },
                 "pick_up_date": {
                     "type": "string"
                 },
@@ -846,9 +833,6 @@ const docTemplate = `{
                 },
                 "pickup_location": {
                     "$ref": "#/definitions/location.LocationResponse"
-                },
-                "vendor": {
-                    "$ref": "#/definitions/vendors.VendorResponse"
                 }
             }
         },
