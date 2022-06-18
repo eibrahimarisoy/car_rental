@@ -8,12 +8,11 @@ import (
 )
 
 type Pagination struct {
-	Limit      int         `json:"limit,omitempty;query:limit"`
-	Page       int         `json:"page,omitempty;query:page"`
-	TotalRows  int64       `json:"total_rows"`
-	TotalPages int         `json:"total_pages"`
-	Rows       interface{} `json:"rows"`
-	Q          string      `json:"q,omitempty;query:q"`
+	Limit      int    `json:"limit,omitempty;query:limit"`
+	Page       int    `json:"page,omitempty;query:page"`
+	TotalRows  int64  `json:"total_rows"`
+	TotalPages int    `json:"total_pages"`
+	Q          string `json:"q,omitempty;query:q"`
 }
 
 func (p *Pagination) ToString() string {

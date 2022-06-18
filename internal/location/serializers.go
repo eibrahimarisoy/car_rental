@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
+	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 	"github.com/google/uuid"
 )
 
@@ -44,4 +45,20 @@ func LocationToResponse(location *models.Location) *LocationResponse {
 		CreatedAt: location.CreatedAt,
 		UpdatedAt: location.UpdatedAt,
 	}
+}
+
+type LocationListResponse struct {
+	pgHelper.Pagination
+	Data []LocationResponse `json:"data"`
+}
+
+// LocationsToLocationListResponse converts a list of locations to a response
+func LocationsToLocationListResponse(locations *[]models.Location, pg *pgHelper.Pagination) *LocationListResponse {
+	response := &LocationListResponse{}
+	response.Pagination = *pg
+	for _, location := range *locations {
+		response.Data = append(response.Data, *LocationToResponse(&location))
+	}
+	return response
+
 }

@@ -91,18 +91,18 @@ func (res *CarResponse) FromCar(car *models.Car) {
 
 type CarListResponse struct {
 	pgHelper.Pagination
-	Cars []CarResponse `json:"cars"`
+	Data []CarResponse `json:"cars"`
 }
 
 // CarsToCarListResponse converts a list of cars to a car list response
 func CarsToCarListResponse(cars *[]models.Car, pagination *pgHelper.Pagination) *CarListResponse {
 	res := &CarListResponse{
 		Pagination: *pagination,
-		Cars:       []CarResponse{},
+		Data:       []CarResponse{},
 	}
 	for _, car := range *cars {
-		res.Cars = append(res.Cars, CarResponse{})
-		res.Cars[len(res.Cars)-1].FromCar(&car)
+		res.Data = append(res.Data, CarResponse{})
+		res.Data[len(res.Data)-1].FromCar(&car)
 	}
 	return res
 }

@@ -100,7 +100,7 @@ func ReservationToResponse(reservation *models.Reservation) *ReservationResponse
 
 type ReservationListResponse struct {
 	pgHelper.Pagination
-	Cars []ReservationResponse `json:"cars"`
+	Data []ReservationResponse `json:"cars"`
 }
 
 // ReservationsToReservationListResponse converts a list of reservations to a reservation list response
@@ -108,7 +108,7 @@ func ReservationsToReservationListResponse(reservations *[]models.Reservation, p
 	response := &ReservationListResponse{}
 	response.Pagination = *pagination
 	for _, reservation := range *reservations {
-		response.Cars = append(response.Cars, *ReservationToResponse(&reservation))
+		response.Data = append(response.Data, *ReservationToResponse(&reservation))
 	}
 	return response
 }

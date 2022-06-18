@@ -34,19 +34,19 @@ func NewLocationHandler(r *gin.RouterGroup, locationService LocationServiceInter
 // @Param        q     query    string  false  "Search query"
 // @Param        page  query    int     false  "Page number"
 // @Param        limit query    int     false  "Page limit"
-// @Success      200  {object}  pagination.Pagination
+// @Success      200  {object}  location.LocationListResponse
 // @Failure      500  {object}  _type.APIErrorResponse
 // @Router       /locations/    [get]
 func (h *LocationHandler) GetAllLocations(c *gin.Context) {
 	pagination := c.MustGet("pagination").(*paginationHelper.Pagination)
 
-	pagination, err := h.locationService.GetAllActiveLocations(pagination)
+	locations, err := h.locationService.GetAllActiveLocations(pagination)
 	fmt.Println(err)
 	if err != nil {
 		c.JSON(errorHandler.ErrorResponse(err))
 		return
 	}
-	c.JSON(http.StatusOK, pagination)
+	c.JSON(http.StatusOK, LocationsToLocationListResponse(locations, pagination))
 }
 
 // CreateLocation is a handler to create a location

@@ -10,7 +10,7 @@ import (
 )
 
 type LocationRepositoryInterface interface {
-	GetAllActiveLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
+	GetAllActiveLocations(pg *pgHelper.Pagination) (*[]models.Location, error)
 	CreateLocation(location *models.Location) (*models.Location, error)
 	GetLocationByID(id uuid.UUID) (*models.Location, error)
 }
@@ -30,8 +30,8 @@ func (r *LocationRepository) Migration() {
 }
 
 // GetAllActiveLocations gets all active locations from database
-func (r *LocationRepository) GetAllActiveLocations(pg *pgHelper.Pagination) (*pgHelper.Pagination, error) {
-	var locations []*models.Location
+func (r *LocationRepository) GetAllActiveLocations(pg *pgHelper.Pagination) (*[]models.Location, error) {
+	var locations *[]models.Location
 	var totalRows int64
 
 	query := r.db.Model(&models.Location{}).Where("is_active = ?", true).Scopes(Search(pg.Q)).Count(&totalRows)
@@ -41,8 +41,7 @@ func (r *LocationRepository) GetAllActiveLocations(pg *pgHelper.Pagination) (*pg
 		return nil, query.Error
 	}
 
-	pg.Rows = &locations
-	return pg, nil
+	return locations, nil
 }
 
 // CreateLocation creates a location and returns it
