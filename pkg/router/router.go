@@ -45,7 +45,7 @@ func InitiliazeRoutes(rootRouter *gin.RouterGroup, db *gorm.DB, cfg *config.Conf
 	carRepo := car.NewCarRepository(db)
 	carRepo.Migration()
 
-	carService := car.NewCarService(carRepo)
+	carService := car.NewCarService(carRepo, locationRepo, officeRepo)
 	car.NewCarHandler(carGroup, carService)
 
 	// Initialize reservation service, repo and handler here

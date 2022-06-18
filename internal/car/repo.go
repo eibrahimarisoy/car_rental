@@ -1,20 +1,19 @@
 package car
 
 import (
-	"fmt"
-
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/google/uuid"
 
+	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 	"gorm.io/gorm"
 )
 
 type CarRepositoryInterface interface {
-	GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error)
 	CreateCar(car *models.Car) (*models.Car, error)
 	GetCarByID(id uuid.UUID) (*models.Car, error)
 	UpdateCarStatus(car *models.Car) (*models.Car, error)
+	GetCarsByOfficeIDs(pg *pgHelper.Pagination, officeIDs []uuid.UUID) (*pgHelper.Pagination, error)
 }
 
 type CarRepository struct {
@@ -31,32 +30,37 @@ func (r *CarRepository) Migration() {
 	r.db.AutoMigrate(&models.Car{})
 }
 
-func (r *CarRepository) GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pgHelper.Pagination, error) {
-	location := models.Location{}
-	locationId := filter.Location
+func (r *CarRepository) CreateCar(car *models.Car) (*models.Car, error) {
 
-	res := r.db.Model(&models.Location{}).Where("id = ? AND is_active = ?", locationId, true).First(&location)
-	if res.Error != nil || res.Error == gorm.ErrRecordNotFound {
-		return nil, fmt.Errorf("Location is Not Active")
+	if err := r.db.Create(car).Error; err != nil {
+		return nil, err
 	}
+	return car, nil
+}
 
-	pickupWeekDay := int(filter.PickupDate.ToTime().Weekday())
-	dropoffWeekDay := int(filter.DropoffDate.ToTime().Weekday())
+// GetCarByID returns a car by id
+func (r *CarRepository) GetCarByID(id uuid.UUID) (*models.Car, error) {
+	car := models.Car{}
+	res := r.db.Model(&models.Car{}).Where("status = ? AND id = ?", models.CarStatusAvailable, id).First(&car)
+	if res.Error == gorm.ErrRecordNotFound {
+		return nil, errorHandler.CarNotFoundError
+	} else if res.Error != nil {
+		return nil, res.Error
+	}
+	return &car, nil
+}
 
-	pickupTime := filter.PickupTime.ToTime()
-	dropoffTime := filter.DropoffTime.ToTime()
+// UpdateCarStatus updates a car status
+func (r *CarRepository) UpdateCarStatus(car *models.Car) (*models.Car, error) {
+	res := r.db.Model(&models.Car{}).Where("id = ?", car.ID).Update("status", car.Status)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return car, nil
+}
 
-	officeIDs := []uuid.UUID{}
-
-	res = r.db.Model(&models.Office{}).Select("id").Where(
-		"opening_hours <= ? AND opening_hours <=  ? AND closing_hours >= ? AND closing_hours >= ? AND location_id = ?",
-		pickupTime, dropoffTime, pickupTime, dropoffTime, locationId,
-	).Joins(
-		"JOIN office_working_days ON office_working_days.office_id = offices.id",
-	).Where(
-		"office_working_days.working_day_id IN ?", []int{pickupWeekDay, dropoffWeekDay},
-	).Find(&officeIDs)
-
+// GetCarsByOfficeIDs returns a list of cars by office ids
+func (r *CarRepository) GetCarsByOfficeIDs(pg *pgHelper.Pagination, officeIDs []uuid.UUID) (*pgHelper.Pagination, error) {
 	var cars []*models.Car
 	var totalRows int64
 
@@ -70,34 +74,6 @@ func (r *CarRepository) GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pg
 	if query.Error != nil {
 		return nil, query.Error
 	}
-
 	pg.Rows = &cars
 	return pg, nil
-}
-
-func (r *CarRepository) CreateCar(car *models.Car) (*models.Car, error) {
-
-	if err := r.db.Create(car).Error; err != nil {
-		return nil, err
-	}
-	return car, nil
-}
-
-// GetCarByID returns a car by id
-func (r *CarRepository) GetCarByID(id uuid.UUID) (*models.Car, error) {
-	car := models.Car{}
-	res := r.db.Model(&models.Car{}).Where("status = ? AND id = ?", models.CarStatusAvailable, id).First(&car)
-	if res.Error != nil {
-		return nil, res.Error
-	}
-	return &car, nil
-}
-
-// UpdateCarStatus updates a car status
-func (r *CarRepository) UpdateCarStatus(car *models.Car) (*models.Car, error) {
-	res := r.db.Model(&models.Car{}).Where("id = ?", car.ID).Update("status", car.Status)
-	if res.Error != nil {
-		return nil, res.Error
-	}
-	return car, nil
 }

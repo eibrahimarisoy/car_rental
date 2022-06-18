@@ -2,6 +2,7 @@ package office
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/google/uuid"
@@ -15,6 +16,7 @@ type OfficeRepositoryInterface interface {
 	GetOffices(pg *pgHelper.Pagination) (*pgHelper.Pagination, error)
 	CreateOffice(office *models.Office) (*models.Office, error)
 	FindByOfficeAndVendorID(officeID, vendorID uuid.UUID) (*models.Office, error)
+	GetOfficeIDs(locationId uuid.UUID, pickupWeekDay, dropoffWeekDay int, pickupTime, dropoffTime time.Time) ([]uuid.UUID, error)
 }
 
 type OfficeRepository struct {
@@ -102,4 +104,24 @@ func (r *OfficeRepository) FindByOfficeAndVendorID(officeID, vendorID uuid.UUID)
 	}
 
 	return &office, nil
+}
+
+// GetOfficeIDs returns all office based on given params
+func (r *OfficeRepository) GetOfficeIDs(
+	locationId uuid.UUID, pickupWeekDay, dropoffWeekDay int, pickupTime, dropoffTime time.Time,
+) ([]uuid.UUID, error) {
+	var officeIDs []uuid.UUID
+	res := r.db.Model(&models.Office{}).Select("id").Where(
+		"opening_hours <= ? AND opening_hours <=  ? AND closing_hours >= ? AND closing_hours >= ? AND location_id = ?",
+		pickupTime, dropoffTime, pickupTime, dropoffTime, locationId,
+	).Joins(
+		"JOIN office_working_days ON office_working_days.office_id = offices.id",
+	).Where(
+		"office_working_days.working_day_id IN ?", []int{pickupWeekDay, dropoffWeekDay},
+	).Find(&officeIDs)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return officeIDs, nil
 }
