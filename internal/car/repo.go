@@ -60,7 +60,7 @@ func (r *CarRepository) GetCars(pg *pgHelper.Pagination, filter *CarFilter) (*pg
 
 	query := r.db.Model(&models.Car{}).Preload("Office").Preload("Vendor").
 		Where(
-			"office_id IN ?", officeIDs,
+			"status = ? AND office_id IN ?", models.CarStatusAvailable, officeIDs,
 		).Find(&cars).Scopes().Count(&totalRows)
 
 	query.Scopes(pgHelper.Paginate(totalRows, pg, r.db)).Find(&cars)

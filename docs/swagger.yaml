@@ -11,12 +11,24 @@ definitions:
   car.CarRequest:
     properties:
       fuel:
+        enum:
+        - gas
+        - diesel
+        - electric
         type: string
       name:
         type: string
       office_id:
         type: string
+      status:
+        enum:
+        - available
+        - rented
+        type: string
       transmission:
+        enum:
+        - automatic
+        - manual
         type: string
       vendor_id:
         type: string
@@ -31,6 +43,8 @@ definitions:
         type: string
       office:
         $ref: '#/definitions/office.OfficeResponse'
+      status:
+        type: string
       transmission:
         type: string
       vendor:
@@ -250,7 +264,7 @@ paths:
         name: dropoff_time
         required: true
         type: string
-      - description: uuid formatted ID
+      - description: UUID formatted ID
         in: query
         name: location_id
         required: true

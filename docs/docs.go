@@ -87,7 +87,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "uuid formatted ID",
+                        "description": "UUID formatted ID",
                         "name": "location_id",
                         "in": "query",
                         "required": true
@@ -537,7 +537,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "fuel": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "gas",
+                        "diesel",
+                        "electric"
+                    ]
                 },
                 "name": {
                     "type": "string"
@@ -545,8 +550,19 @@ const docTemplate = `{
                 "office_id": {
                     "type": "string"
                 },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "available",
+                        "rented"
+                    ]
+                },
                 "transmission": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "automatic",
+                        "manual"
+                    ]
                 },
                 "vendor_id": {
                     "type": "string"
@@ -567,6 +583,9 @@ const docTemplate = `{
                 },
                 "office": {
                     "$ref": "#/definitions/office.OfficeResponse"
+                },
+                "status": {
+                    "type": "string"
                 },
                 "transmission": {
                     "type": "string"

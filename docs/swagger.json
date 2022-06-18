@@ -80,7 +80,7 @@
                     },
                     {
                         "type": "string",
-                        "description": "uuid formatted ID",
+                        "description": "UUID formatted ID",
                         "name": "location_id",
                         "in": "query",
                         "required": true
@@ -530,7 +530,12 @@
             "type": "object",
             "properties": {
                 "fuel": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "gas",
+                        "diesel",
+                        "electric"
+                    ]
                 },
                 "name": {
                     "type": "string"
@@ -538,8 +543,19 @@
                 "office_id": {
                     "type": "string"
                 },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "available",
+                        "rented"
+                    ]
+                },
                 "transmission": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "automatic",
+                        "manual"
+                    ]
                 },
                 "vendor_id": {
                     "type": "string"
@@ -560,6 +576,9 @@
                 },
                 "office": {
                     "$ref": "#/definitions/office.OfficeResponse"
+                },
+                "status": {
+                    "type": "string"
                 },
                 "transmission": {
                     "type": "string"
