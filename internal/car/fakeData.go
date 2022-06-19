@@ -4,39 +4,42 @@ import (
 	"time"
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
+	"github.com/eibrahimarisoy/car_rental/internal/office"
+	"github.com/eibrahimarisoy/car_rental/internal/vendors"
 	"github.com/google/uuid"
 )
 
+var availableStatus = models.CarStatusAvailable
+var carName1, carName2, carName3 = "car1", "car2", "car3"
+
 var (
-	locationName1, locationName2 = "locationName1", "locationName2"
-
-	FakeLocation_1 = models.Location{
-		Base: models.Base{
-			ID:        uuid.New(),
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
-		Name:     &locationName1,
-		IsActive: true,
+	FakeCar_1 = models.Car{
+		Base:         models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Status:       &availableStatus,
+		Name:         &carName1,
+		Fuel:         models.Diesel,
+		Transmission: models.Automatic,
+		Vendor:       vendors.FakeVendor_1,
+		Office:       office.FakeOffice_1,
+	}
+	FakeCar_2 = models.Car{
+		Base:         models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Status:       &availableStatus,
+		Name:         &carName2,
+		Fuel:         models.Diesel,
+		Transmission: models.Automatic,
+		Vendor:       vendors.FakeVendor_2,
+		Office:       office.FakeOffice_2,
+	}
+	FakeCar_3 = models.Car{
+		Base:         models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Status:       &availableStatus,
+		Name:         &carName3,
+		Fuel:         models.Diesel,
+		Transmission: models.Automatic,
+		Vendor:       vendors.FakeVendor_1,
+		Office:       office.FakeOffice_1,
 	}
 
-	FakeLocation_2 = models.Location{
-		Base: models.Base{
-			ID:        uuid.New(),
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
-		Name:     &locationName2,
-		IsActive: false,
-	}
+	FakeCarList = []models.Car{FakeCar_1, FakeCar_2, FakeCar_3}
 )
-
-// var FakeOfficeData = []models.Office{
-// 	&Office{
-// 		Base: &models.Base{
-// 			ID:        uuid.New(),
-// 			CreatedAt: time.Now(),
-// 			UpdatedAt: time.Now(),
-// 		},
-// 		OpeningHours: "00:00",
-// 		ClosingHours: "23:59",}}}
