@@ -65,7 +65,7 @@ $ swagger serve ./docs/swagger.yaml
 Default **Car Rental API** routes are listed below. 
 
 | METHOD | ROUTE                     | DETAILS                                                 |
-|------------------------------------|---------------------------------------------------------|
+|--------|----------------------------|--------------------------------------------------------|
 | GET    | /api/v1/locations/        | list active locations (with Paging and query parameter) |
 | POST   | /api/v1/locations/        | create location                                         | 
 | GET    | /api/v1/vendors/          | list vendors (with Paging)                              |
@@ -73,7 +73,7 @@ Default **Car Rental API** routes are listed below.
 | GET    | /api/v1/offices/          | list offices (with Paging)                              |
 | POST   | /api/v1/offices/          | create office                                           |
 | GET    | /api/v1/cars/             | list cars (with Paging and filter parameters)           |
-| POST   | /api/v1/cars/             | create car                                              |                   
+| POST   | /api/v1/cars/             | create car                                              |                
 | GET    | /api/v1/reservations/     | list reservations (with Paging)                         | 
 | POST   | /api/v1/reservations/     | create reservation                                      |
 | GET    | /api/v1/healthz           | health check                                            | 
