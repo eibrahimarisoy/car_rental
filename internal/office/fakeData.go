@@ -23,13 +23,19 @@ var (
 
 var (
 	openingHours_1 = models.JsonTime{}
-
 	openingHours_2 = models.JsonTime{}
 )
 
 var (
+	officeID1 = uuid.New()
+	officeID2 = uuid.New()
+
+	OfficeIds = []uuid.UUID{officeID1, officeID2}
+)
+
+var (
 	FakeOffice_1 = models.Office{
-		Base:         models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Base:         models.Base{ID: officeID1, CreatedAt: time.Now(), UpdatedAt: time.Now()},
 		OpeningHours: openingHours_1.FromString("00:00"),
 		ClosingHours: openingHours_1.FromString("23:59"),
 		WorkingDays: []models.WorkingDay{
@@ -39,7 +45,7 @@ var (
 		Location: location.FakeLocation_1,
 	}
 	FakeOffice_2 = models.Office{
-		Base:         models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Base:         models.Base{ID: officeID2, CreatedAt: time.Now(), UpdatedAt: time.Now()},
 		OpeningHours: openingHours_2.FromString("00:00"),
 		ClosingHours: openingHours_2.FromString("23:59"),
 		WorkingDays: []models.WorkingDay{

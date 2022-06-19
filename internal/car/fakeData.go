@@ -3,9 +3,11 @@ package car
 import (
 	"time"
 
+	"github.com/eibrahimarisoy/car_rental/internal/location"
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/eibrahimarisoy/car_rental/internal/office"
 	"github.com/eibrahimarisoy/car_rental/internal/vendors"
+	filters "github.com/eibrahimarisoy/car_rental/pkg/filters"
 	"github.com/google/uuid"
 )
 
@@ -42,4 +44,18 @@ var (
 	}
 
 	FakeCarList = []models.Car{FakeCar_1, FakeCar_2, FakeCar_3}
+)
+
+var (
+	dateJson = models.JsonDate{}
+	timeJson = models.JsonTime{}
+
+	FakeCarFilterData = filters.CarFilter{
+		PickupDate:  dateJson.FromString("19-06-2022"),
+		PickupTime:  timeJson.FromString("09:00"),
+		DropoffDate: dateJson.FromString("21-06-2022"),
+		DropoffTime: timeJson.FromString("12:00"),
+
+		Location: location.LocationId1,
+	}
 )

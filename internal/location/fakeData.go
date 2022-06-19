@@ -9,28 +9,30 @@ import (
 )
 
 var (
+	LocationId1, LocationId2, LocationId3, LocationId4 = uuid.New(), uuid.New(), uuid.New(), uuid.New()
+
 	locationName1, locationName2, locationName3, locationName4 = "locationName1", "locationName2", "locationName3", "locationName4"
 
 	FakeLocation_1 = models.Location{
-		Base:     models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Base:     models.Base{ID: LocationId1, CreatedAt: time.Now(), UpdatedAt: time.Now()},
 		Name:     &locationName1,
 		IsActive: true,
 	}
 
 	FakeLocation_2 = models.Location{
-		Base:     models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Base:     models.Base{ID: LocationId2, CreatedAt: time.Now(), UpdatedAt: time.Now()},
 		Name:     &locationName2,
 		IsActive: false,
 	}
 
 	FakeLocation_3 = models.Location{
-		Base:     models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Base:     models.Base{ID: LocationId3, CreatedAt: time.Now(), UpdatedAt: time.Now()},
 		Name:     &locationName3,
 		IsActive: true,
 	}
 
 	FakeLocation_4 = models.Location{
-		Base:     models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Base:     models.Base{ID: LocationId4, CreatedAt: time.Now(), UpdatedAt: time.Now()},
 		Name:     &locationName4,
 		IsActive: false,
 	}

@@ -12,13 +12,23 @@ import (
 )
 
 var lh LocationHandler
+var mockService *locationMock.MockLocationServiceInterface
 
-func TestLocationHandler_GetAllLocations(t *testing.T) {
+func setUpService(t *testing.T) func() {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockService := locationMock.NewMockLocationServiceInterface(ctrl)
+	mockService = locationMock.NewMockLocationServiceInterface(ctrl)
 	lh = LocationHandler{locationService: mockService}
+
+	return func() {
+		defer ctrl.Finish()
+	}
+}
+
+func TestLocationHandler_GetAllLocations(t *testing.T) {
+	trd := setUpService(t)
+	defer trd()
 
 	mockService.EXPECT().GetAllActiveLocations(&FakeDataWithPagination).Return(&FakeLocationsData, nil)
 
