@@ -4,6 +4,7 @@ import (
 	"github.com/eibrahimarisoy/car_rental/internal/location"
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/eibrahimarisoy/car_rental/internal/office"
+	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
 	"github.com/eibrahimarisoy/car_rental/pkg/filters"
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 )
@@ -37,7 +38,7 @@ func NewCarService(
 func (s *CarService) GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter) (*[]models.Car, error) {
 	location, err := s.locationRepo.GetLocationByID(filter.Location)
 	if err != nil {
-		return nil, err
+		return nil, errorHandler.OfficeNotFoundError
 	}
 	pickupWeekDay := int(filter.PickupDate.ToTime().Weekday())
 	dropoffWeekDay := int(filter.DropoffDate.ToTime().Weekday())
