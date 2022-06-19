@@ -43,6 +43,12 @@ func (r *OfficeRequest) ToOffice() *models.Office {
 	}
 }
 
+// OfficeListResponse is the response for the list of offices
+type OfficeListResponse struct {
+	pgHelper.Pagination
+	Data []OfficeResponse `json:"data"`
+}
+
 type OfficeResponse struct {
 	ID           uuid.UUID                 `json:"id"`
 	OpeningHours models.JsonTime           `json:"opening_hours"`
@@ -81,12 +87,6 @@ func OfficeToSimpleResponse(office *models.Office) *OfficeSimpleResponse {
 	}
 
 	return &res
-}
-
-// OfficeListResponse is the response for the list of offices
-type OfficeListResponse struct {
-	pgHelper.Pagination
-	Data []OfficeResponse `json:"data"`
 }
 
 // OfficesToOfficeListResponse converts a list of offices to a response

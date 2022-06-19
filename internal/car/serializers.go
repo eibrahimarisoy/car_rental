@@ -66,6 +66,11 @@ func (req *CarRequest) ToCar() *models.Car {
 	}
 }
 
+type CarListResponse struct {
+	pgHelper.Pagination
+	Data []CarResponse `json:"data"`
+}
+
 type CarResponse struct {
 	ID           uuid.UUID              `json:"id"`
 	Status       models.CarStatusEnums  `json:"status"`
@@ -76,22 +81,28 @@ type CarResponse struct {
 	Office       office.OfficeResponse  `json:"office"`
 }
 
-// FromCar converts a car to a response
-func (res *CarResponse) FromCar(car *models.Car) {
-	res.ID = car.ID
-	res.Status = *car.Status
-	res.Name = *car.Name
-	res.Fuel = car.Fuel.String()
-	res.Transmission = car.Transmission.String()
-	vendor := car.Vendor
-	res.Vendor = *vendors.VendorToResponse(&vendor)
-	office_ := car.Office
-	res.Office = *office.OfficeToResponse(&office_)
+type CarSimpleResponse struct {
+	ID           uuid.UUID             `json:"id"`
+	Status       models.CarStatusEnums `json:"status"`
+	Name         string                `json:"name"`
+	Fuel         string                `json:"fuel"`
+	Transmission string                `json:"transmission"`
+	Vendor       string                `json:"vendor"`
+	Office       string                `json:"office"`
 }
 
-type CarListResponse struct {
-	pgHelper.Pagination
-	Data []CarResponse `json:"data"`
+// CarToCarResponse converts a car to a car response
+func CarToCarResponse(car *models.Car) *CarResponse {
+	res := &CarResponse{
+		ID:           car.ID,
+		Status:       *car.Status,
+		Name:         *car.Name,
+		Fuel:         car.Fuel.String(),
+		Transmission: car.Transmission.String(),
+		Vendor:       *vendors.VendorToResponse(&car.Vendor),
+		Office:       *office.OfficeToResponse(&car.Office),
+	}
+	return res
 }
 
 // CarsToCarListResponse converts a list of cars to a car list response
@@ -101,20 +112,9 @@ func CarsToCarListResponse(cars *[]models.Car, pagination *pgHelper.Pagination) 
 		Data:       []CarResponse{},
 	}
 	for _, car := range *cars {
-		res.Data = append(res.Data, CarResponse{})
-		res.Data[len(res.Data)-1].FromCar(&car)
+		res.Data = append(res.Data, *CarToCarResponse(&car))
 	}
 	return res
-}
-
-type CarSimpleResponse struct {
-	ID           uuid.UUID             `json:"id"`
-	Status       models.CarStatusEnums `json:"status"`
-	Name         string                `json:"name"`
-	Fuel         string                `json:"fuel"`
-	Transmission string                `json:"transmission"`
-	Vendor       string                `json:"vendor"`
-	Office       string                `json:"office"`
 }
 
 // CarToCarSimpleResponse converts a car to a car list response

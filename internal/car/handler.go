@@ -89,10 +89,7 @@ func (h *CarHandler) CreateCar(c *gin.Context) {
 		return
 	}
 
-	carResponse := CarResponse{}
-	carResponse.FromCar(car)
-	c.JSON(http.StatusCreated, carResponse)
+	c.JSON(http.StatusCreated, CarToCarResponse(car))
 
 	return
-
 }

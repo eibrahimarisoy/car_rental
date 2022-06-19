@@ -14,6 +14,7 @@ type ReservationHandler struct {
 	reservationService ReservationServiceInterface
 }
 
+// NewReservationHandler creates a new reservation handler
 func NewReservationHandler(r *gin.RouterGroup, reservationService ReservationServiceInterface) {
 	handler := &ReservationHandler{
 		reservationService: reservationService,

@@ -19,6 +19,7 @@ type CarServiceInterface interface {
 	CreateCar(car *models.Car) (*models.Car, error)
 }
 
+// NewCarService creates a new car service
 func NewCarService(
 	carRepo CarRepositoryInterface,
 	locationRepo location.LocationRepositoryInterface,
@@ -31,6 +32,7 @@ func NewCarService(
 	}
 }
 
+// GetCars returns cars by filter and pagination
 func (s *CarService) GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter) (*[]models.Car, error) {
 	location, err := s.locationRepo.GetLocationByID(filter.Location)
 	if err != nil {
@@ -50,6 +52,7 @@ func (s *CarService) GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter)
 	return s.carRepo.GetCarsByOfficeIDs(pg, officeIDs)
 }
 
+// CreateCar creates a car and returns it
 func (s *CarService) CreateCar(car *models.Car) (*models.Car, error) {
 	return s.carRepo.CreateCar(car)
 }

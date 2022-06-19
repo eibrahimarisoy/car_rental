@@ -17,12 +17,14 @@ type ReservationRepository struct {
 	db *gorm.DB
 }
 
+// NewReservationRepository creates a new reservation repository
 func NewReservationRepository(db *gorm.DB) *ReservationRepository {
 	return &ReservationRepository{
 		db: db,
 	}
 }
 
+// Migration migrates database
 func (r *ReservationRepository) Migration() {
 	r.db.AutoMigrate(&models.Reservation{})
 }

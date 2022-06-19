@@ -13,6 +13,7 @@ type OfficeHandler struct {
 	officeService OfficeServiceInterface
 }
 
+// GetOffice is a handler to get a office
 func NewOfficeHandler(r *gin.RouterGroup, officeService OfficeServiceInterface) {
 	handler := &OfficeHandler{officeService: officeService}
 

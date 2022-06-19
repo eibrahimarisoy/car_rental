@@ -28,6 +28,11 @@ func (req *LocationRequest) ToModel() *models.Location {
 	}
 }
 
+type LocationListResponse struct {
+	pgHelper.Pagination
+	Data []LocationResponse `json:"data"`
+}
+
 type LocationResponse struct {
 	ID        uuid.UUID `json:"id"`
 	Name      string    `json:"name"`
@@ -45,11 +50,6 @@ func LocationToResponse(location *models.Location) *LocationResponse {
 		CreatedAt: location.CreatedAt,
 		UpdatedAt: location.UpdatedAt,
 	}
-}
-
-type LocationListResponse struct {
-	pgHelper.Pagination
-	Data []LocationResponse `json:"data"`
 }
 
 // LocationsToLocationListResponse converts a list of locations to a response

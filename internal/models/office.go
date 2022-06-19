@@ -21,6 +21,7 @@ type Office struct {
 	WorkingDays []WorkingDay `json:"working_days" gorm:"many2many:office_working_days"`
 }
 
+// GetWorkingDays returns the working days of the office.
 func (o *Office) GetWorkingDays() []WorkingDay {
 	return o.WorkingDays
 }

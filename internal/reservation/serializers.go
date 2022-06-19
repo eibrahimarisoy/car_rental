@@ -54,6 +54,11 @@ func (r *ReservationRequest) ToReservation() *models.Reservation {
 	}
 }
 
+type ReservationListResponse struct {
+	pgHelper.Pagination
+	Data []ReservationResponse `json:"data"`
+}
+
 // ReservationResponse represents the reservation response.
 type ReservationResponse struct {
 	ID             uuid.UUID                 `json:"id"`
@@ -67,19 +72,6 @@ type ReservationResponse struct {
 
 	Car    car.CarSimpleResponse `json:"car"`
 	Driver driver.DriverResponse `json:"driver_response"`
-}
-
-// FromReservation converts the reservation model to reservation response.
-func (r *ReservationResponse) FromReservation(reservation *models.Reservation) {
-	r.ID = reservation.ID
-	r.PickupLocation = location.LocationResponse(r.PickupLocation)
-	r.PickupDate = reservation.PickupDate
-	r.PickupTime = reservation.PickupTime
-	r.DropoffLocation = location.LocationResponse(r.DropoffLocation)
-	r.DropoffDate = reservation.DropoffDate
-	r.DropoffTime = reservation.DropoffTime
-	r.Car = *car.CarToCarSimpleResponse(&reservation.Car)
-	r.Driver = driver.DriverResponse(r.Driver)
 }
 
 // ReservationToResponse converts a reservation to a response.
@@ -96,11 +88,6 @@ func ReservationToResponse(reservation *models.Reservation) *ReservationResponse
 		Driver:          *driver.DriverToResponse(&reservation.Driver),
 	}
 	return reservationResponse
-}
-
-type ReservationListResponse struct {
-	pgHelper.Pagination
-	Data []ReservationResponse `json:"data"`
 }
 
 // ReservationsToReservationListResponse converts a list of reservations to a reservation list response

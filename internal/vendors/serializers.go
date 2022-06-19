@@ -26,6 +26,11 @@ func (req *VendorRequest) ToVendor() *models.Vendor {
 	}
 }
 
+type VendorListResponse struct {
+	pgHelper.Pagination
+	Data []VendorResponse `json:"data"`
+}
+
 type VendorResponse struct {
 	ID        uuid.UUID `json:"id"`
 	Name      string    `json:"name"`
@@ -42,11 +47,6 @@ func VendorToResponse(vendor *models.Vendor) *VendorResponse {
 		UpdatedAt: vendor.UpdatedAt,
 	}
 	return vendorResponse
-}
-
-type VendorListResponse struct {
-	pgHelper.Pagination
-	Data []VendorResponse `json:"data"`
 }
 
 // VendorsToVendorListResponse converts a list of reservations to a reservation list response

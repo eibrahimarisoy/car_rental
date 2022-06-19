@@ -23,12 +23,14 @@ type OfficeRepository struct {
 	db *gorm.DB
 }
 
+// NewOfficeRepository returns a new office repository
 func NewOfficeRepository(db *gorm.DB) *OfficeRepository {
 	return &OfficeRepository{
 		db: db,
 	}
 }
 
+// Migration migrates the database also loads the working days
 func (r *OfficeRepository) Migration() {
 	r.db.AutoMigrate(&models.Office{})
 	r.LoadWorkingDay()

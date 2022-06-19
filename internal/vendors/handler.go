@@ -13,6 +13,7 @@ type VendorHandler struct {
 	vendorService VendorServiceInterface
 }
 
+// NewVendorHandler creates a new vendor handler
 func NewVendorHandler(r *gin.RouterGroup, vendorService VendorServiceInterface) {
 	handler := &VendorHandler{
 		vendorService: vendorService,

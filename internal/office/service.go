@@ -14,16 +14,19 @@ type OfficeServiceInterface interface {
 	CreateOffice(office *models.Office) (*models.Office, error)
 }
 
+// NewOfficeService creates a new office service
 func NewOfficeService(officeRepo OfficeRepositoryInterface) *OfficeService {
 	return &OfficeService{
 		officeRepo: officeRepo,
 	}
 }
 
+// GetOffices returns all offices
 func (s *OfficeService) GetOffices(pg *pgHelper.Pagination) (*[]models.Office, error) {
 	return s.officeRepo.GetOffices(pg)
 }
 
+// CreateOffice creates a office and returns it
 func (s *OfficeService) CreateOffice(office *models.Office) (*models.Office, error) {
 	workingDays, err := s.officeRepo.GetWorkingDaysByValues(&office.WorkingDays)
 	if err != nil {

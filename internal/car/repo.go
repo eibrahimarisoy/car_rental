@@ -20,6 +20,7 @@ type CarRepository struct {
 	db *gorm.DB
 }
 
+// NewCarRepository creates a new car repository
 func NewCarRepository(db *gorm.DB) *CarRepository {
 	return &CarRepository{
 		db: db,

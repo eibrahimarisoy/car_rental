@@ -14,16 +14,19 @@ type LocationServiceInterface interface {
 	CreateLocation(location *models.Location) (*models.Location, error)
 }
 
+// NewLocationService creates a new location service
 func NewLocationService(locationRepo LocationRepositoryInterface) *LocationService {
 	return &LocationService{
 		locationRepo: locationRepo,
 	}
 }
 
+// GetAllActiveLocations returns all active locations
 func (s *LocationService) GetAllActiveLocations(pg *pgHelper.Pagination) (*[]models.Location, error) {
 	return s.locationRepo.GetAllActiveLocations(pg)
 }
 
+// CreateLocation creates a location and returns it
 func (s *LocationService) CreateLocation(location *models.Location) (*models.Location, error) {
 	return s.locationRepo.CreateLocation(location)
 }

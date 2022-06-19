@@ -21,6 +21,7 @@ type ReservationServiceInterface interface {
 	CreateReservation(reservation *models.Reservation) (*models.Reservation, error)
 }
 
+// NewReservationService creates a new reservation service
 func NewReservationService(
 	reservationRepo ReservationRepositoryInterface,
 	carRepo car.CarRepositoryInterface,
@@ -35,10 +36,12 @@ func NewReservationService(
 	}
 }
 
+// GetReservations returns all reservations
 func (s *ReservationService) GetReservations(pg *pgHelper.Pagination) (*[]models.Reservation, error) {
 	return s.reservationRepo.GetReservations(pg)
 }
 
+// CreateReservation creates a reservation and returns it
 func (s *ReservationService) CreateReservation(reservation *models.Reservation) (*models.Reservation, error) {
 	car, err := s.carRepo.GetCarByID(reservation.CarID)
 	if err != nil {

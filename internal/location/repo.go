@@ -19,12 +19,14 @@ type LocationRepository struct {
 	db *gorm.DB
 }
 
+// NewLocationRepository creates a new location repository
 func NewLocationRepository(db *gorm.DB) *LocationRepository {
 	return &LocationRepository{
 		db: db,
 	}
 }
 
+// Migration for location table
 func (r *LocationRepository) Migration() {
 	r.db.AutoMigrate(&models.Location{})
 }

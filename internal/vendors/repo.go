@@ -15,14 +15,17 @@ type VendorRepository struct {
 	db *gorm.DB
 }
 
+// NewVendorRepository creates a new vendor repository
 func NewVendorRepository(db *gorm.DB) *VendorRepository {
 	return &VendorRepository{db: db}
 }
 
+// Migration migrates database
 func (r *VendorRepository) Migration() {
 	r.db.AutoMigrate(&models.Vendor{})
 }
 
+// CreateVendor creates a new vendor in database
 func (r *VendorRepository) CreateVendor(vendor *models.Vendor) (*models.Vendor, error) {
 	if err := r.db.Create(vendor).Error; err != nil {
 		return nil, err
@@ -30,6 +33,7 @@ func (r *VendorRepository) CreateVendor(vendor *models.Vendor) (*models.Vendor, 
 	return vendor, nil
 }
 
+// GetVendors gets vendors from database with pagination
 func (r *VendorRepository) GetVendors(pg *pgHelper.Pagination) (*[]models.Vendor, error) {
 	var vendors *[]models.Vendor
 	var totalRows int64
