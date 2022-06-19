@@ -14,6 +14,7 @@ type CarService struct {
 	locationRepo location.LocationRepositoryInterface
 }
 
+//go:generate mockgen -destination=../../mocks/car/car_service_interface.go -package=car github.com/eibrahimarisoy/car_rental/internal/car CarServiceInterface
 type CarServiceInterface interface {
 	GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter) (*[]models.Car, error)
 	CreateCar(car *models.Car) (*models.Car, error)

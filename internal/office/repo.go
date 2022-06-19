@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
+//go:generate mockgen -destination=../../mocks/office/repo.go -package=office github.com/eibrahimarisoy/car_rental/internal/office OfficeRepositoryInterface
 type OfficeRepositoryInterface interface {
 	GetOffices(pg *pgHelper.Pagination) (*[]models.Office, error)
 	CreateOffice(office *models.Office) (*models.Office, error)

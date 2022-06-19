@@ -9,11 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
-//go:generate mockgen -destination=../../mocks/location/location_repository_interface.go -package=location github.com/eibrahimarisoy/car_rental/internal/location LocationRepository
 type LocationRepository struct {
 	db *gorm.DB
 }
 
+//go:generate mockgen -destination=../../mocks/location/location_repository_interface.go -package=location github.com/eibrahimarisoy/car_rental/internal/location LocationRepositoryInterface
 type LocationRepositoryInterface interface {
 	GetAllActiveLocations(pg *pgHelper.Pagination) (*[]models.Location, error)
 	CreateLocation(location *models.Location) (*models.Location, error)

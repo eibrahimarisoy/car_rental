@@ -5,7 +5,7 @@ import (
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 )
 
-//go:generate mockgen -destination=../../mocks/location/location_service_interface.go -package=location github.com/eibrahimarisoy/car_rental/internal/location LocationService
+//go:generate mockgen -destination=../../mocks/location/location_service_interface.go -package=location github.com/eibrahimarisoy/car_rental/internal/location LocationServiceInterface
 type LocationService struct {
 	locationRepo LocationRepositoryInterface
 }

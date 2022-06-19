@@ -8,25 +8,35 @@ import (
 	"github.com/google/uuid"
 )
 
-var name1, name2, name3 = "Location 1", "Location 2", "Location 3"
+var (
+	locationName1, locationName2, locationName3, locationName4 = "locationName1", "locationName2", "locationName3", "locationName4"
 
-var FakeData = []models.Location{
-	{
+	FakeLocation_1 = models.Location{
 		Base:     models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
-		Name:     &name1,
+		Name:     &locationName1,
 		IsActive: true,
-	},
-	{
+	}
+
+	FakeLocation_2 = models.Location{
 		Base:     models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
-		Name:     &name2,
-		IsActive: true,
-	},
-	{
-		Base:     models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
-		Name:     &name3,
+		Name:     &locationName2,
 		IsActive: false,
-	},
-}
+	}
+
+	FakeLocation_3 = models.Location{
+		Base:     models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Name:     &locationName3,
+		IsActive: true,
+	}
+
+	FakeLocation_4 = models.Location{
+		Base:     models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
+		Name:     &locationName4,
+		IsActive: false,
+	}
+)
+
+var FakeLocationsData = []models.Location{FakeLocation_1, FakeLocation_2, FakeLocation_3}
 
 var FakeDataWithPagination = pgHelper.Pagination{
 	Limit: 2,

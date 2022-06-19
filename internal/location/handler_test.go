@@ -20,7 +20,7 @@ func TestLocationHandler_GetAllLocations(t *testing.T) {
 	mockService := locationMock.NewMockLocationServiceInterface(ctrl)
 	lh = LocationHandler{locationService: mockService}
 
-	mockService.EXPECT().GetAllActiveLocations(&FakeDataWithPagination).Return(&FakeData, nil)
+	mockService.EXPECT().GetAllActiveLocations(&FakeDataWithPagination).Return(&FakeLocationsData, nil)
 
 	router := gin.New()
 	router.GET("/api/v1/locations", lh.GetAllLocations)

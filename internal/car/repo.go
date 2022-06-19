@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
+//go:generate mockgen -destination=../../mocks/car/car_repository_interface.go -package=car github.com/eibrahimarisoy/car_rental/internal/car CarRepositoryInterface
 type CarRepositoryInterface interface {
 	CreateCar(car *models.Car) (*models.Car, error)
 	GetCarByID(id uuid.UUID) (*models.Car, error)

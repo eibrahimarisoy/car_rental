@@ -28,7 +28,7 @@ func TestLocationService_GetAllActiveLocations(t *testing.T) {
 	td := setUp(t)
 	defer td()
 
-	mockLocationRepository.EXPECT().GetAllActiveLocations(&FakeDataWithPagination).Return(&FakeData, nil)
+	mockLocationRepository.EXPECT().GetAllActiveLocations(&FakeDataWithPagination).Return(&FakeLocationsData, nil)
 
 	result, err := service.GetAllActiveLocations(&FakeDataWithPagination)
 
@@ -36,5 +36,5 @@ func TestLocationService_GetAllActiveLocations(t *testing.T) {
 		t.Errorf("Error: %v", err)
 	}
 	assert.NotEmpty(t, result)
-	assert.Equal(t, len(FakeData), len(*result))
+	assert.Equal(t, len(FakeLocationsData), len(*result))
 }
