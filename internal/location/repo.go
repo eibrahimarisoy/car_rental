@@ -3,6 +3,7 @@ package location
 import (
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 
 	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
@@ -34,6 +35,8 @@ func (r *LocationRepository) Migration() {
 
 // GetAllActiveLocations gets all active locations from database
 func (r *LocationRepository) GetAllActiveLocations(pg *pgHelper.Pagination) (*[]models.Location, error) {
+	zap.L().Debug("location.repo.GetAllActiveLocations", zap.Reflect("pg", *pg))
+
 	var locations *[]models.Location
 	var totalRows int64
 
@@ -49,6 +52,7 @@ func (r *LocationRepository) GetAllActiveLocations(pg *pgHelper.Pagination) (*[]
 
 // CreateLocation creates a location and returns it
 func (r *LocationRepository) CreateLocation(location *models.Location) (*models.Location, error) {
+	zap.L().Debug("location.repo.CreateLocation", zap.Reflect("location", *location))
 
 	if err := r.db.Create(location).Error; err != nil {
 		return nil, err
@@ -58,6 +62,8 @@ func (r *LocationRepository) CreateLocation(location *models.Location) (*models.
 
 // GetLocationByID gets location from database by id
 func (r *LocationRepository) GetLocationByID(id uuid.UUID) (*models.Location, error) {
+	zap.L().Debug("location.repo.GetLocationByID", zap.Reflect("id", id))
+
 	var location models.Location
 
 	query := r.db.Model(&models.Location{}).Where("is_active = ? AND id = ?", true, id).First(&location)

@@ -3,6 +3,7 @@ package car
 import (
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 
 	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
@@ -35,6 +36,7 @@ func (r *CarRepository) Migration() {
 
 // CreateCar creates a car and returns it
 func (r *CarRepository) CreateCar(car *models.Car) (*models.Car, error) {
+	zap.L().Debug("car.repo.CreateCar", zap.Reflect("car", *car))
 
 	if err := r.db.Create(car).Error; err != nil {
 		return nil, err
@@ -44,6 +46,8 @@ func (r *CarRepository) CreateCar(car *models.Car) (*models.Car, error) {
 
 // GetCarByID returns a car by id
 func (r *CarRepository) GetCarByID(id uuid.UUID) (*models.Car, error) {
+	zap.L().Debug("car.repo.GetCarByID", zap.Reflect("car.ID", id))
+
 	car := models.Car{}
 	res := r.db.Model(&models.Car{}).Where("status = ? AND id = ?", models.CarStatusAvailable, id).First(&car)
 	if res.Error == gorm.ErrRecordNotFound {
@@ -56,6 +60,8 @@ func (r *CarRepository) GetCarByID(id uuid.UUID) (*models.Car, error) {
 
 // UpdateCarStatus updates a car status
 func (r *CarRepository) UpdateCarStatus(car *models.Car) (*models.Car, error) {
+	zap.L().Debug("car.repo.UpdateCarStatus", zap.Reflect("car", *car))
+
 	res := r.db.Model(&models.Car{}).Where("id = ?", car.ID).Update("status", car.Status)
 	if res.Error != nil {
 		return nil, res.Error
@@ -65,6 +71,8 @@ func (r *CarRepository) UpdateCarStatus(car *models.Car) (*models.Car, error) {
 
 // GetCarsByOfficeIDs returns a list of cars by office ids
 func (r *CarRepository) GetCarsByOfficeIDs(pg *pgHelper.Pagination, officeIDs []uuid.UUID) (*[]models.Car, error) {
+	zap.L().Debug("car.repo.GetCarsByOfficeIDs", zap.Reflect("pg", *pg), zap.Reflect("officeIDs", officeIDs))
+
 	var cars []models.Car
 	var totalRows int64
 

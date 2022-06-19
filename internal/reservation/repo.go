@@ -2,6 +2,7 @@ package reservation
 
 import (
 	"github.com/eibrahimarisoy/car_rental/internal/models"
+	"go.uber.org/zap"
 
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
 	"gorm.io/gorm"
@@ -32,6 +33,8 @@ func (r *ReservationRepository) Migration() {
 
 // GetReservations gets reservations from database with pagination
 func (r *ReservationRepository) GetReservations(pg *pgHelper.Pagination) (*[]models.Reservation, error) {
+	zap.L().Debug("reservation.repo.GetReservations", zap.Reflect("pg", *pg))
+
 	var reservations []models.Reservation
 	var totalRows int64
 
@@ -47,6 +50,7 @@ func (r *ReservationRepository) GetReservations(pg *pgHelper.Pagination) (*[]mod
 
 // CreateReservation creates a new reservation in database
 func (r *ReservationRepository) CreateReservation(reservation *models.Reservation) (*models.Reservation, error) {
+	zap.L().Debug("reservation.repo.CreateReservation", zap.Reflect("reservation", *reservation))
 
 	if err := r.db.Create(reservation).Error; err != nil {
 		return nil, err

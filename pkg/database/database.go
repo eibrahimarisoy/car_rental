@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/eibrahimarisoy/car_rental/pkg/config"
+	"go.uber.org/zap"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -11,19 +12,18 @@ import (
 func NewPsqlDB(cfg *config.Config) *gorm.DB {
 	db, err := gorm.Open(postgres.Open(cfg.DBConfig.DataSourceName), &gorm.Config{})
 
-	// TODO add logger
 	if err != nil {
-		panic(err)
+		zap.L().Fatal("Error connecting to database", zap.Error(err))
 	}
 
 	sqlDB, err := db.DB()
 
 	if err != nil {
-		panic(err)
+		zap.L().Fatal("Error connecting to database", zap.Error(err))
 	}
 
 	if err := sqlDB.Ping(); err != nil {
-		panic(err)
+		zap.L().Fatal("Cannot ping database", zap.Error(err))
 	}
 
 	sqlDB.SetMaxOpenConns(cfg.DBConfig.MaxOpen)

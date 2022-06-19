@@ -5,6 +5,7 @@ import (
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 
 	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
 	pgHelper "github.com/eibrahimarisoy/car_rental/pkg/pagination"
@@ -60,6 +61,8 @@ func (r *OfficeRepository) LoadWorkingDay() error {
 
 // GetOffices returns all offices
 func (r *OfficeRepository) GetOffices(pg *pgHelper.Pagination) (*[]models.Office, error) {
+	zap.L().Debug("office.repo.GetOffices", zap.Reflect("pg", *pg))
+
 	var offices *[]models.Office
 	var totalRows int64
 
@@ -75,6 +78,7 @@ func (r *OfficeRepository) GetOffices(pg *pgHelper.Pagination) (*[]models.Office
 
 // CreateOffice creates a new office
 func (r *OfficeRepository) CreateOffice(office *models.Office) (*models.Office, error) {
+	zap.L().Debug("office.repo.CreateOffice", zap.Reflect("office", *office))
 
 	if res := r.db.Model(&office).Create(office); res.Error != nil {
 		return nil, res.Error
@@ -85,6 +89,8 @@ func (r *OfficeRepository) CreateOffice(office *models.Office) (*models.Office, 
 
 // FindByOfficeAndVendorID returns a office by office id and vendor id
 func (r *OfficeRepository) FindByOfficeAndVendorID(officeID, vendorID uuid.UUID) (*models.Office, error) {
+	zap.L().Debug("office.repo.FindByOfficeAndVendorID", zap.Reflect("officeID", officeID), zap.Reflect("vendorID", vendorID))
+
 	var office models.Office
 	query := r.db.Model(&models.Office{}).Preload("WorkingDays").Where("id = ? AND vendor_id = ?", officeID, vendorID).First(&office)
 	if query.Error == gorm.ErrRecordNotFound {
@@ -100,6 +106,8 @@ func (r *OfficeRepository) FindByOfficeAndVendorID(officeID, vendorID uuid.UUID)
 func (r *OfficeRepository) GetOfficeIDs(
 	locationId uuid.UUID, pickupWeekDay, dropoffWeekDay int, pickupTime, dropoffTime time.Time,
 ) ([]uuid.UUID, error) {
+	zap.L().Debug("office.repo.GetOfficeIDs", zap.Reflect("locationId", locationId), zap.Reflect("pickupWeekDay", pickupWeekDay), zap.Reflect("dropoffWeekDay", dropoffWeekDay), zap.Reflect("pickupTime", pickupTime), zap.Reflect("dropoffTime", dropoffTime))
+
 	var officeIDs []uuid.UUID
 	res := r.db.Model(&models.Office{}).Select("id").Where(
 		"opening_hours <= ? AND opening_hours <=  ? AND closing_hours >= ? AND closing_hours >= ? AND location_id = ?",
@@ -118,7 +126,8 @@ func (r *OfficeRepository) GetOfficeIDs(
 
 // GetWorkingDaysByValues returns a working day by value
 func (r *OfficeRepository) GetWorkingDaysByValues(workingDays *[]models.WorkingDay) (*[]models.WorkingDay, error) {
-	// var workingDays []models.WorkingDay
+	zap.L().Debug("office.repo.GetWorkingDaysByValues", zap.Reflect("workingDays", *workingDays))
+
 	res := r.db.Model(&models.WorkingDay{}).Find(workingDays)
 	if res.Error != nil {
 		return nil, res.Error
