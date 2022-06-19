@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "c3c5916b-b53f-49fc-b71b-e6bb87767b47",
+		"name": "car_rental",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Locations",
+			"item": [
+				{
+					"name": "Create Location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_active\": false,\n    \"name\": \"Kartal\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}locations/",
+							"host": [
+								"{{base_url}}locations"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Locations",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_active\": true,\n    \"name\": \"maltepe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}locations/",
+							"host": [
+								"{{base_url}}locations"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vendors",
+			"item": [
+				{
+					"name": "Create Vendor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Garenta\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}vendors",
+							"host": [
+								"{{base_url}}vendors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Vendor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}vendors",
+							"host": [
+								"{{base_url}}vendors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Office",
+			"item": [
+				{
+					"name": "Create Office",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"closing_hours\": \"23:59\",\n    \"location_id\": \"68e22a9b-29bf-4dd0-ae70-2aaae458360d\",\n    \"opening_hours\": \"00:00\",\n    \"vendor_id\": \"52f17f64-1da2-4778-8bb9-828bc01e3994\",\n    \"working_days\": [\n        1,2,3,4,5,6,7\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}offices/",
+							"host": [
+								"{{base_url}}offices"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Office",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}offices",
+							"host": [
+								"{{base_url}}offices"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Car",
+			"item": [
+				{
+					"name": "Create Car",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"available\",\n    \"fuel\": \"gas\",\n    \"name\": \"passat\",\n    \"transmission\": \"manual\",\n    \"office_id\": \"275885b2-0d72-4aa6-97da-c97573e1ddd5\",\n    \"vendor_id\": \"52f17f64-1da2-4778-8bb9-828bc01e3994\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}cars",
+							"host": [
+								"{{base_url}}cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Car",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"fuel\": \"gas\",\n\"name\": \"string\",\n\"transmission\": \"manuel\",\n\"office_id\": \"64af2701-a13f-45ac-a12a-ac66d70f2f46\",\n\"vendor_id\": \"278cb1e9-cd5f-44c5-8867-fb7b1dab7c1b\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}cars/?pickup_date=19-06-2022&pickup_time=09:00&dropoff_date=20-06-2022&dropoff_time=10:00&location_id=f72e6850-956a-4555-a121-f231a7bc8d2e",
+							"host": [
+								"{{base_url}}cars"
+							],
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "pickup_date",
+									"value": "19-06-2022"
+								},
+								{
+									"key": "pickup_time",
+									"value": "09:00"
+								},
+								{
+									"key": "dropoff_date",
+									"value": "20-06-2022"
+								},
+								{
+									"key": "dropoff_time",
+									"value": "10:00"
+								},
+								{
+									"key": "location_id",
+									"value": "f72e6850-956a-4555-a121-f231a7bc8d2e"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservation",
+			"item": [
+				{
+					"name": "Create Reservation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"car_id\": \"0d07bce2-7f82-488b-8681-e9d8b6fddecc\",\n    \"driver\": {\n        \"birthday\": \"02-08-1993\",\n        \"email\": \"eibrahimarisoy@gmail.com\",\n        \"first_name\": \"emre\",\n        \"identification_number\": \"37540829408\",\n        \"last_name\": \"arisoy\",\n        \"phone\": \"+905337852236\"\n    },\n    \"drop_off_date\": \"18-06-2022\",\n    \"drop_off_time\": \"01:00\",\n    \"dropoff_location_id\": \"f72e6850-956a-4555-a121-f231a7bc8d2e\",\n    \"pick_up_date\": \"16-06-2022\",\n    \"pick_up_time\": \"18:30\",\n    \"pickup_location_id\": \"f72e6850-956a-4555-a121-f231a7bc8d2e\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}reservations/",
+							"host": [
+								"{{base_url}}reservations"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Reservation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"car_id\": \"db5310f7-8f4e-4688-896b-6a5aeb4e338f\",\n    \"driver_request\": {\n        \"birthday\": \"02-08-1993\",\n        \"email\": \"eibrahimarisoy@gmail.com\",\n        \"first_name\": \"emre\",\n        \"identification_number\": \"37540829402\",\n        \"last_name\": \"arisoy\",\n        \"phone\": \"0(533)7852236\"\n    },\n    \"drop_off_date\": \"18-06-2022\",\n    \"drop_off_time\": \"18:30\",\n    \"dropoff_location_id\": \"126804ec-2be3-438a-a785-f6c9d26233be\",\n    \"office_id\": \"64af2701-a13f-45ac-a12a-ac66d70f2f46\",\n    \"pick_up_date\": \"16-06-2022\",\n    \"pick_up_time\": \"18:30\",\n    \"pickup_location_id\": \"126804ec-2be3-438a-a785-f6c9d26233be\",\n    \"vendor_id\": \"278cb1e9-cd5f-44c5-8867-fb7b1dab7c1b\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}reservations/",
+									"host": [
+										"{{base_url}}reservations"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 18 Jun 2022 12:11:30 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "618"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errCode\": 400,\n    \"errMessage\": \"Given association not found\",\n    \"errDetails\": {\n        \"Severity\": \"ERROR\",\n        \"Code\": \"23503\",\n        \"Message\": \"insert or update on table \\\"reservations\\\" violates foreign key constraint \\\"fk_reservations_pickup_location\\\"\",\n        \"Detail\": \"Key (pickup_location_id)=(126804ec-2be3-438a-a785-f6c9d26233be) is not present in table \\\"locations\\\".\",\n        \"Hint\": \"\",\n        \"Position\": 0,\n        \"InternalPosition\": 0,\n        \"InternalQuery\": \"\",\n        \"Where\": \"\",\n        \"SchemaName\": \"public\",\n        \"TableName\": \"reservations\",\n        \"ColumnName\": \"\",\n        \"DataTypeName\": \"\",\n        \"ConstraintName\": \"fk_reservations_pickup_location\",\n        \"File\": \"ri_triggers.c\",\n        \"Line\": 2528,\n        \"Routine\": \"ri_ReportViolation\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "List Reservation",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"car_id\": \"string\",\n    \"driver_request\": {\n        \"birthday\": \"string\",\n        \"email\": \"string\",\n        \"first_name\": \"string\",\n        \"identification_number\": \"string\",\n        \"last_name\": \"string\",\n        \"phone\": \"string\"\n    },\n    \"drop_off_date\": \"string\",\n    \"drop_off_time\": \"string\",\n    \"dropoff_location_id\": \"string\",\n    \"office_id\": \"string\",\n    \"pick_up_date\": \"string\",\n    \"pick_up_time\": \"string\",\n    \"pickup_location_id\": \"string\",\n    \"vendor_id\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}reservations",
+							"host": [
+								"{{base_url}}reservations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
