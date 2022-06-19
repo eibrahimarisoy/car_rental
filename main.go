@@ -9,10 +9,10 @@ import (
 	"github.com/eibrahimarisoy/car_rental/pkg/config"
 	db "github.com/eibrahimarisoy/car_rental/pkg/database"
 	graceful "github.com/eibrahimarisoy/car_rental/pkg/graceful"
+	logger "github.com/eibrahimarisoy/car_rental/pkg/logging"
 	router "github.com/eibrahimarisoy/car_rental/pkg/router"
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+	"go.uber.org/zap"
 )
 
 // @title           Car Rental API
@@ -34,6 +34,11 @@ func main() {
 		fmt.Println("Failed to load config:", err)
 	}
 
+	// Set logger
+	logger.NewLogger(cfg)
+	defer logger.Close()
+
+	// Connect to database
 	DB := db.NewPsqlDB(cfg)
 
 	r := gin.Default()
@@ -45,8 +50,6 @@ func main() {
 		WriteTimeout: time.Duration(cfg.ServerConfig.WriteTimeoutSecs) * time.Second,
 	}
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	rootRouter := r.Group(cfg.ServerConfig.RoutePrefix)
 	router.InitiliazeRoutes(rootRouter, DB, cfg)
 
@@ -57,11 +60,11 @@ func main() {
 	rootRouter.GET("/readyz", func(c *gin.Context) {
 		db, err := DB.DB()
 		if err != nil {
-			// zap.L().Fatal("cannot get sql database instance", zap.Error(err))
+			zap.L().Fatal("cannot get sql database instance", zap.Error(err))
 			fmt.Println("cannot get sql database instance", err)
 		}
 		if err := db.Ping(); err != nil {
-			// zap.L().Fatal("cannot ping database", zap.Error(err))
+			zap.L().Fatal("cannot ping database", zap.Error(err))
 			fmt.Println("cannot ping database", err)
 		}
 		c.JSON(http.StatusOK, nil)

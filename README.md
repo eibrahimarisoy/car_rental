@@ -23,6 +23,7 @@ Clients can;
  - zap (logger)
  - mockgen
  - testify
+ - air
 
 ## Dependencies used in the project
  - Go 1.18
