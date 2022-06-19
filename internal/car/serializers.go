@@ -71,13 +71,13 @@ type CarListResponse struct {
 }
 
 type CarResponse struct {
-	ID           uuid.UUID              `json:"id"`
-	Status       models.CarStatusEnums  `json:"status"`
-	Name         string                 `json:"name"`
-	Fuel         string                 `json:"fuel"`
-	Transmission string                 `json:"transmission"`
-	Vendor       vendors.VendorResponse `json:"vendor"`
-	Office       office.OfficeResponse  `json:"office"`
+	ID           uuid.UUID                   `json:"id"`
+	Status       models.CarStatusEnums       `json:"status"`
+	Name         string                      `json:"name"`
+	Fuel         string                      `json:"fuel"`
+	Transmission string                      `json:"transmission"`
+	Vendor       vendors.VendorResponse      `json:"vendor"`
+	Office       office.OfficeSimpleResponse `json:"office"`
 }
 
 type CarSimpleResponse struct {
@@ -99,7 +99,7 @@ func CarToCarResponse(car *models.Car) *CarResponse {
 		Fuel:         car.Fuel.String(),
 		Transmission: car.Transmission.String(),
 		Vendor:       *vendors.VendorToResponse(&car.Vendor),
-		Office:       *office.OfficeToResponse(&car.Office),
+		Office:       *office.OfficeToSimpleResponse(&car.Office),
 	}
 	return res
 }

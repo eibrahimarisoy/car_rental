@@ -59,7 +59,7 @@ definitions:
       name:
         type: string
       office:
-        $ref: '#/definitions/office.OfficeResponse'
+        $ref: '#/definitions/office.OfficeSimpleResponse'
       status:
         type: string
       transmission:
@@ -212,6 +212,17 @@ definitions:
           type: string
         type: array
     type: object
+  office.OfficeSimpleResponse:
+    properties:
+      closing_hours:
+        type: string
+      id:
+        type: string
+      location:
+        type: string
+      opening_hours:
+        type: string
+    type: object
   reservation.ReservationListResponse:
     properties:
       data:
@@ -234,7 +245,7 @@ definitions:
       car_id:
         format: UUID
         type: string
-      driver_request:
+      driver:
         $ref: '#/definitions/driver.DriverRequest'
       drop_off_date:
         format: 02-01-2006
@@ -256,7 +267,7 @@ definitions:
         type: string
     required:
     - car_id
-    - driver_request
+    - driver
     - drop_off_date
     - drop_off_time
     - dropoff_location_id

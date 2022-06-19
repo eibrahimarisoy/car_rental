@@ -34,6 +34,7 @@ var (
 	InvalidEmail                   = errors.New("Invalid email")
 	DriverAgeNotValid              = errors.New("Driver age is not valid")
 	CarNotFoundError               = errors.New("Car not found")
+	LocationIsNotAvailable         = errors.New("Location is not available")
 	LocationNotFoundError          = errors.New("Location not found")
 	OfficeNotFoundError            = errors.New("Office not found")
 	DropoffOfficeNotAvailableError = errors.New("Drop off Office is not available")
@@ -96,16 +97,12 @@ func ParseErrors(err error) RestErr {
 		return NewRestError(http.StatusBadRequest, RequiredFieldError.Error(), err)
 	case errors.Is(err, InvalidIdentificationNumber):
 		return NewRestError(http.StatusBadRequest, InvalidIdentificationNumber.Error(), err)
-	case strings.Contains(err.Error(), "23505"):
-		return NewRestError(http.StatusBadRequest, UniqueError.Error(), err)
-	case strings.Contains(err.Error(), "23503"):
-		return NewRestError(http.StatusBadRequest, GivenAssociationNotFound.Error(), err)
 	case strings.Contains(err.Error(), "cannot unmarshal"):
 		return NewRestError(http.StatusBadRequest, CannotBindGivenData.Error(), err)
 	case strings.Contains(err.Error(), "invalid UUID length"):
 		return NewRestError(http.StatusBadRequest, InvalidUUIDFormat.Error(), err)
-	case strings.Contains(err.Error(), "Location is Not Active"):
-		return NewRestError(http.StatusBadRequest, LocationNoAvailable.Error(), err)
+	case errors.Is(err, LocationIsNotAvailable):
+		return NewRestError(http.StatusBadRequest, LocationIsNotAvailable.Error(), err)
 	case errors.Is(err, InvalidEnumsValue):
 		return NewRestError(http.StatusBadRequest, InvalidEnumsValue.Error(), err)
 	case errors.Is(err, InvalidPhoneNumber):

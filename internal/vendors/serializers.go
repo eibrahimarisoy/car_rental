@@ -2,6 +2,7 @@ package vendors
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
@@ -40,6 +41,7 @@ type VendorResponse struct {
 
 // VendorToResponse converts a vendor to a response
 func VendorToResponse(vendor *models.Vendor) *VendorResponse {
+	fmt.Println(vendor)
 	vendorResponse := &VendorResponse{
 		ID:        vendor.ID,
 		Name:      *vendor.Name,

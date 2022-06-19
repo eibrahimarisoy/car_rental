@@ -59,10 +59,10 @@ type OfficeResponse struct {
 }
 
 type OfficeSimpleResponse struct {
-	ID           uuid.UUID                 `json:"id"`
-	OpeningHours models.JsonTime           `json:"opening_hours"`
-	ClosingHours models.JsonTime           `json:"closing_hours"`
-	Location     location.LocationResponse `json:"location"`
+	ID           uuid.UUID       `json:"id"`
+	OpeningHours models.JsonTime `json:"opening_hours"`
+	ClosingHours models.JsonTime `json:"closing_hours"`
+	Location     uuid.UUID       `json:"location"`
 }
 
 // OfficeToResponse converts the Office to OfficeResponse
@@ -83,7 +83,7 @@ func OfficeToSimpleResponse(office *models.Office) *OfficeSimpleResponse {
 		ID:           office.ID,
 		OpeningHours: office.OpeningHours,
 		ClosingHours: office.ClosingHours,
-		Location:     *location.LocationToResponse(&office.Location),
+		Location:     office.LocationID,
 	}
 
 	return &res

@@ -608,7 +608,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "office": {
-                    "$ref": "#/definitions/office.OfficeResponse"
+                    "$ref": "#/definitions/office.OfficeSimpleResponse"
                 },
                 "status": {
                     "type": "string"
@@ -839,6 +839,23 @@ const docTemplate = `{
                 }
             }
         },
+        "office.OfficeSimpleResponse": {
+            "type": "object",
+            "properties": {
+                "closing_hours": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "opening_hours": {
+                    "type": "string"
+                }
+            }
+        },
         "reservation.ReservationListResponse": {
             "type": "object",
             "properties": {
@@ -869,7 +886,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "car_id",
-                "driver_request",
+                "driver",
                 "drop_off_date",
                 "drop_off_time",
                 "dropoff_location_id",
@@ -882,7 +899,7 @@ const docTemplate = `{
                     "type": "string",
                     "format": "UUID"
                 },
-                "driver_request": {
+                "driver": {
                     "$ref": "#/definitions/driver.DriverRequest"
                 },
                 "drop_off_date": {

@@ -38,7 +38,7 @@ func NewCarService(
 func (s *CarService) GetCars(pg *pgHelper.Pagination, filter *filters.CarFilter) (*[]models.Car, error) {
 	location, err := s.locationRepo.GetLocationByID(filter.Location)
 	if err != nil {
-		return nil, errorHandler.OfficeNotFoundError
+		return nil, errorHandler.LocationIsNotAvailable
 	}
 	pickupWeekDay := int(filter.PickupDate.ToTime().Weekday())
 	dropoffWeekDay := int(filter.DropoffDate.ToTime().Weekday())
