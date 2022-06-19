@@ -2,7 +2,6 @@ package car
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/eibrahimarisoy/car_rental/internal/models"
 	"github.com/eibrahimarisoy/car_rental/internal/office"
@@ -119,7 +118,6 @@ func CarsToCarListResponse(cars *[]models.Car, pagination *pgHelper.Pagination) 
 
 // CarToCarSimpleResponse converts a car to a car list response
 func CarToCarSimpleResponse(car *models.Car) *CarSimpleResponse {
-	fmt.Println(car.Vendor)
 	res := &CarSimpleResponse{
 		ID:           car.ID,
 		Status:       *car.Status,

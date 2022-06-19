@@ -16,9 +16,10 @@ type ReservationService struct {
 	locationRepo    location.LocationRepositoryInterface
 }
 
+//go:generate mockgen -destination=../../mocks/reservation/reservation_service_interface.go -package=reservation github.com/eibrahimarisoy/car_rental/internal/reservation ReservationServiceInterface
 type ReservationServiceInterface interface {
 	GetReservations(pg *pgHelper.Pagination) (*[]models.Reservation, error)
-	CreateReservation(reservation *models.Reservation) (*models.Reservation, error)
+	CreateReservation(reservation *models.Reservation) error
 }
 
 // NewReservationService creates a new reservation service
@@ -42,49 +43,49 @@ func (s *ReservationService) GetReservations(pg *pgHelper.Pagination) (*[]models
 }
 
 // CreateReservation creates a reservation and returns it
-func (s *ReservationService) CreateReservation(reservation *models.Reservation) (*models.Reservation, error) {
+func (s *ReservationService) CreateReservation(reservation *models.Reservation) error {
 	car, err := s.carRepo.GetCarByID(reservation.CarID)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	pickupLocation, err := s.locationRepo.GetLocationByID(reservation.PickupLocationID)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	pickupOffice, err := s.officeRepo.FindByOfficeAndVendorID(car.OfficeID, car.VendorID)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if !pickupOffice.IsAvaliable(reservation.PickupDate.ToTime(), reservation.PickupTime.ToTime()) {
-		return nil, errorHandler.PickupOfficeNotAvailableError
+		return errorHandler.PickupOfficeNotAvailableError
 	}
 
 	dropoffLocation, err := s.locationRepo.GetLocationByID(reservation.DropoffLocationID)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	dropoffOffice, err := s.officeRepo.FindByOfficeAndVendorID(car.OfficeID, car.VendorID)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if !dropoffOffice.IsAvaliable(reservation.DropoffDate.ToTime(), reservation.DropoffTime.ToTime()) {
-		return nil, errorHandler.DropoffOfficeNotAvailableError
+		return errorHandler.DropoffOfficeNotAvailableError
 	}
 
 	reservation, err = s.reservationRepo.CreateReservation(reservation)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	status := models.CarStatusRented
 	car.Status = &status
 	car, err = s.carRepo.UpdateCarStatus(car)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	reservation.Car = *car
 	reservation.PickupLocation = *pickupLocation
 	reservation.DropoffLocation = *dropoffLocation
 
-	return reservation, nil
+	return nil
 }

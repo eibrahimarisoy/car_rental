@@ -73,7 +73,8 @@ func (h *ReservationHandler) CreateReservation(c *gin.Context) {
 		return
 	}
 
-	reservation, err := h.reservationService.CreateReservation(reqBody.ToReservation())
+	reservation := reqBody.ToReservation()
+	err := h.reservationService.CreateReservation(reservation)
 	if err != nil {
 		c.JSON(errorHandler.ErrorResponse(err))
 		return

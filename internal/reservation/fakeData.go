@@ -1,6 +1,7 @@
 package reservation
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/eibrahimarisoy/car_rental/internal/car"
@@ -25,7 +26,7 @@ var FakeDriver = models.Driver{
 }
 
 var (
-	FakeReservation1 = models.Reservation{
+	FakeReservation1 = &models.Reservation{
 		Base:           models.Base{ID: uuid.New(), CreatedAt: time.Now(), UpdatedAt: time.Now()},
 		PickupLocation: location.FakeLocation_1,
 		PickupDate:     dateJson.FromString("01-01-2020"),
@@ -67,5 +68,20 @@ var (
 		Driver: FakeDriver,
 	}
 
-	FakeReservationList = []models.Reservation{FakeReservation1, FakeReservation2, FakeReservation3}
+	FakeReservationList = []models.Reservation{*FakeReservation1, FakeReservation2, FakeReservation3}
+
+	FakeReservation4 = models.Reservation{
+		PickupLocationID: location.FakeLocation_1.ID,
+		PickupDate:       dateJson.FromString("01-01-2020"),
+		PickupTime:       timeJson.FromString("12:00"),
+
+		DropoffLocationID: location.FakeLocation_1.ID,
+		DropoffDate:       dateJson.FromString("01-01-2020"),
+		DropoffTime:       timeJson.FromString("13:00"),
+
+		CarID:  car.FakeCar_1.ID,
+		Driver: FakeDriver,
+	}
+
+	FakeReservationRequest, _ = json.Marshal(FakeReservation4)
 )

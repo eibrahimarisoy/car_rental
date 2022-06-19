@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -36,7 +35,6 @@ func (o *Office) IsAvaliable(date, time time.Time) bool {
 		}
 	}
 	if dateOK && o.OpeningHours.ToTime().Before(time) && o.ClosingHours.ToTime().After(time) {
-		fmt.Println("office is available")
 		return true
 	}
 	return false

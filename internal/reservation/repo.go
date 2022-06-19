@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+//go:generate mockgen -destination=../../mocks/reservation/reservation_repository_interface.go -package=reservation github.com/eibrahimarisoy/car_rental/internal/reservation ReservationRepositoryInterface
 type ReservationRepositoryInterface interface {
 	GetReservations(pg *pgHelper.Pagination) (*[]models.Reservation, error)
 	CreateReservation(reservation *models.Reservation) (*models.Reservation, error)

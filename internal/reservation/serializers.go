@@ -23,7 +23,7 @@ type ReservationRequest struct {
 
 	CarID uuid.UUID `json:"car_id" validate:"required" binding:"required" format:"UUID"`
 
-	Driver *driver.DriverRequest `json:"driver_request" validate:"required" binding:"required"`
+	Driver *driver.DriverRequest `json:"driver" validate:"required" binding:"required"`
 }
 
 // Validate validates the reservation request.

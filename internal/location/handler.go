@@ -1,7 +1,6 @@
 package location
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
@@ -41,7 +40,7 @@ func (h *LocationHandler) GetAllLocations(c *gin.Context) {
 	pagination := c.MustGet("pagination").(*paginationHelper.Pagination)
 
 	locations, err := h.locationService.GetAllActiveLocations(pagination)
-	fmt.Println(err)
+
 	if err != nil {
 		c.JSON(errorHandler.ErrorResponse(err))
 		return

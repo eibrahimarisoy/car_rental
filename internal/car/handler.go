@@ -1,7 +1,6 @@
 package car
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/eibrahimarisoy/car_rental/pkg/errorHandler"
@@ -47,7 +46,6 @@ func (h *CarHandler) GetAllCars(c *gin.Context) {
 	pagination := c.MustGet("pagination").(*paginationHelper.Pagination)
 	filter := c.MustGet("carFilter").(*filterHelper.CarFilter)
 
-	fmt.Println(*filter)
 	cars, err := h.carService.GetCars(pagination, filter)
 
 	if err != nil {
